@@ -9,7 +9,7 @@
       "lint": "tslint --project .",
       "build-ts": "tsc",
       "postinstall": "npm run build-ts",
-      "start": "npm run serve",
+      "start": "ts-node index.ts",
       "serve": "node dist/index.js",
       "watch-node": "nodemon dist/index.js",
       "watch-ts": "tsc -w"

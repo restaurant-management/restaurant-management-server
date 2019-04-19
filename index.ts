@@ -1,8 +1,8 @@
-import * as bodyParser from 'body-parser';
-import * as dotenv from 'dotenv';
-import * as express from 'express';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import express from 'express';
 import {Request, Response} from 'express';
-import * as logger from 'morgan';
+import logger from 'morgan';
 import {createConnection} from 'typeorm';
 import {default as ormconfig} from './ormconfig';
 import {User} from './src/entity/User';
