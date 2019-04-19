@@ -19,12 +19,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(logger('dev'));
 
-app.get('*', (_req: Request, res: Response) =>
-    res.status(200).send({
-        message: 'Welcome to test typescript',
-    }),
-);
-
 createConnection(ormconfig).then(async (connection) => {
 
     console.log('Inserting a new user into the database...');
@@ -40,6 +34,12 @@ createConnection(ormconfig).then(async (connection) => {
     console.log('Loaded users: ', users);
 
     console.log('Here you can setup and run express/koa/any other framework.');
+
+    app.get('*', (_req: Request, res: Response) =>
+        res.status(200).send({
+            message: users,
+        }),
+    );
 
 }).catch((error) => console.log(error));
 
