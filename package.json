@@ -24,7 +24,8 @@
       "pg": "^7.10.0",
       "reflect-metadata": "^0.1.13",
       "ts-node": "^8.1.0",
-      "typeorm": "^0.2.16"
+      "typeorm": "^0.2.16",
+      "typescript": "^3.4.4"
    },
    "devDependencies": {
       "@types/body-parser": "^1.17.0",
@@ -33,7 +34,6 @@
       "@types/morgan": "^1.7.35",
       "@types/node": "^11.13.5",
       "@types/pg": "^7.4.14",
-      "ts-node-dev": "^1.0.0-pre.32",
-      "typescript": "^3.4.4"
+      "ts-node-dev": "^1.0.0-pre.32"
    }
 }
