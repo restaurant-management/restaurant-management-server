@@ -2,6 +2,7 @@
   <dictionary name="victorlee">
     <words>
       <w>dotenv</w>
+      <w>ormconfig</w>
     </words>
   </dictionary>
 </component>
