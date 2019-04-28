@@ -13,10 +13,7 @@
       "serve": "node dist/index.js",
       "watch-node": "nodemon dist/index.js",
       "watch-ts": "tsc -w",
-      "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate",
-      "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:create",
-      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-      "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
+      "typeorm": "ts-node ./node_modules/typeorm/cli.js"
    },
    "author": "Hieren Lee",
    "license": "ISC",
