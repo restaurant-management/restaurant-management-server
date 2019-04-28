@@ -7,12 +7,12 @@ export class User {
     public id: number;
 
     @Column()
-    public firstName: string;
+    public fullName: string;
 
     @Column()
-    public lastName: string;
+    public birthday: Date;
 
     @Column()
-    public age: number;
+    public point: number;
 
 }
