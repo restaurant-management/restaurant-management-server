@@ -3,6 +3,8 @@
     <words>
       <w>dotenv</w>
       <w>ormconfig</w>
+      <w>sequelize</w>
+      <w>todos</w>
     </words>
   </dictionary>
 </component>

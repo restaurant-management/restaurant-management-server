@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/restaurant-management-server.iml" filepath="$PROJECT_DIR$/.idea/restaurant-management-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/typenode.iml" filepath="$PROJECT_DIR$/.idea/typenode.iml" />
     </modules>
   </component>
 </project>
