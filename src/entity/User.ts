@@ -1,9 +1,20 @@
-import {BaseEntity, Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    Generated,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import {Bill} from './Bill';
-import {GroupUser} from './GroupUser';
+import {Permission} from './Permission';
+import {Role} from './Role';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseEntity{
 
     @PrimaryGeneratedColumn()
     public userId: number;
@@ -21,27 +32,22 @@ export class User extends BaseEntity {
     @Column()
     public password: string;
 
-    @Column({
-        length: 100,
-        nullable: true
-    })
+    @Column({length: 100, nullable: true})
     public fullName: string;
 
-    @Column("date", {
-        nullable: true
-    })
+    @Column("date", {nullable: true})
     public birthday: Date;
 
-    @Column("int", {
-        default: 0
-    })
+    @Column("int", {default: 0})
     public point: number;
 
-    @ManyToOne(_type => GroupUser, groupUser => groupUser.users)
-    public Group: GroupUser;
+    @ManyToOne(_type => Role, role => role.users)
+    public role: Role;
 
-    @OneToMany(_type => Bill, bill => bill.user, {
-        nullable: true
-    })
+    @ManyToMany(_type => Permission, {eager: true, onDelete: 'CASCADE'})
+    @JoinTable()
+    public permissions: Permission[];
+
+    @OneToMany(_type => Bill, bill => bill.user, {nullable: true})
     public bills: Bill[];
 }
