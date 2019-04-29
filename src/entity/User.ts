@@ -1,12 +1,22 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Bill} from './Bill';
 import {GroupUser} from './GroupUser';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
+    public userId: number;
+
+    @Column()
+    @Generated("uuid")
+    public uuid: string;
+
+    @Column({unique: true})
     public userName: string;
+
+    @Column({unique: true})
+    public email: string;
 
     @Column()
     public password: string;
