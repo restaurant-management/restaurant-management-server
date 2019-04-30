@@ -1,9 +1,8 @@
-import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import {Permission} from './Permission';
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {User} from './User';
 
 @Entity()
-export class Role {
+export class Role extends BaseEntity{
 
     @PrimaryGeneratedColumn()
     public roleId: number;
@@ -17,10 +16,9 @@ export class Role {
     @Column({nullable: true})
     public description: string;
 
+    @Column('text', {array: true, nullable: true})
+    public permissions: string[];
+
     @OneToMany(_type => User, user => user.role)
     public users: User[];
-
-    @ManyToMany(_type => Permission, {eager: true})
-    @JoinTable()
-    public permissions: Permission[];
 }

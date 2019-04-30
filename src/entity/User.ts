@@ -1,16 +1,5 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    Generated,
-    JoinTable,
-    ManyToMany,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn
-} from 'typeorm';
+import {BaseEntity, Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Bill} from './Bill';
-import {Permission} from './Permission';
 import {Role} from './Role';
 
 @Entity()
@@ -44,9 +33,8 @@ export class User extends BaseEntity{
     @ManyToOne(_type => Role, role => role.users)
     public role: Role;
 
-    @ManyToMany(_type => Permission, {eager: true, onDelete: 'CASCADE'})
-    @JoinTable()
-    public permissions: Permission[];
+    @Column('text', {array: true})
+    public permissions: string[];
 
     @OneToMany(_type => Bill, bill => bill.user, {nullable: true})
     public bills: Bill[];
