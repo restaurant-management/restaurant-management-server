@@ -18,8 +18,6 @@ export class BillDetail {
     @PrimaryColumn()
     public dishId: number;
 
-    @Column("int", {
-        default: 0
-    })
+    @Column("int", {default: 0})
     public quantity: number;
 }

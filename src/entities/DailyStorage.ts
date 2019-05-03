@@ -1,7 +1,12 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {DailyDishDetail} from './DailyDishDetail';
 
-export type DaySession = 'morning' | 'noon' | 'afternoon' | 'evening';
+export enum DaySession {
+    Morning = 'morning',
+    Noon = 'noon',
+    Afternoon = 'afternoon',
+    Evening = 'evening'
+}
 
 @Entity()
 export class DailyStorage {
@@ -14,7 +19,7 @@ export class DailyStorage {
     @Column({
         type: 'enum',
         nullable: true,
-        enum: ['morning', 'noon', 'afternoon', 'evening']
+        enum: Object.keys(DaySession).map(value => DaySession[value]),
     })
     public session: DaySession;
 
