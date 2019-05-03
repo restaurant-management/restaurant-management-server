@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Bill} from './Bill';
 import {Role} from './Role';
 
@@ -31,9 +31,10 @@ export class User extends BaseEntity{
     public point: number;
 
     @ManyToOne(_type => Role, role => role.users)
+    @JoinColumn({referencedColumnName: 'slug', name: 'role'})
     public role: Role;
 
-    @Column('text', {array: true})
+    @Column('text', {array: true, nullable: true})
     public permissions: string[];
 
     @OneToMany(_type => Bill, bill => bill.user, {nullable: true})

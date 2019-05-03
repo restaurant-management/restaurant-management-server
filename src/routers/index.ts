@@ -1,9 +1,9 @@
 import {Router} from 'express';
-import authRouter from './authRouter';
+import userRouter from './user.router';
 
 const router = Router();
 
-router.use('/api/auth', authRouter);
+router.use('/users', userRouter);
 
 // Default Get.
 router.get('*', (_req, res) => {

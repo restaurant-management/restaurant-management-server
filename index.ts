@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import logger from 'morgan';
 import {createConnection} from 'typeorm';
-import router from './src/router';
+import {errorHandler} from './src/helpers/errorHandler';
+import router from './src/routers';
+import InitializeData from './src/InitializeData';
 
 // Config to use environment variable
 dotenv.config();
@@ -18,9 +20,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(logger('dev'));
 
 
-createConnection().then(() => {
+createConnection().then(async () => {
 
+    await InitializeData();
     app.use(router);
+    app.use(errorHandler);
 
 }).catch((error) => console.log(error));
 
