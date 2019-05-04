@@ -12,10 +12,8 @@ export enum Permission {
     /**
      * Permission about *bill*.
      */
-    CreateBill = 'create-bill',
-    EditBill = 'edit-bill',
+    BillManagement = 'bill-management',
     UpdateBillStatus = 'update-bill-status',
-    DeleteBill = 'delete-bill',
 
     /**
      * Permission about *dish*.

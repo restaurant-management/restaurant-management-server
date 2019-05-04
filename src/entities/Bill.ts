@@ -1,8 +1,9 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {BillDetail} from './BillDetail';
 import {User} from './User';
 
 export enum BillStatus {
+    Created = 'created',
     Preparing = 'preparing',
     PrepareDone = 'prepare-done',
     Delivering = 'delivering',
@@ -11,23 +12,28 @@ export enum BillStatus {
 }
 
 @Entity()
-export class Bill {
+export class Bill extends BaseEntity{
     @PrimaryGeneratedColumn()
     public billId: number;
 
-    @Column("date")
+    @Column('timestamp with time zone')
     public day: Date;
 
     @Column({
         type: 'enum',
         enum: Object.keys(BillStatus).map(value => BillStatus[value]),
-        default: BillStatus.Preparing
+        default: BillStatus.Created
     })
     public status: BillStatus;
 
     @ManyToOne(_type => User, user => user.bills)
+    @JoinColumn({name: 'username', referencedColumnName: 'userName'})
     public user: User;
 
-    @OneToMany(_type => BillDetail, billDetail => billDetail.bill)
+    @Column()
+    public username: string;
+
+    @OneToMany(_type => BillDetail, billDetail => billDetail.bill,
+        {cascade: true})
     public billDetails: BillDetail[];
 }

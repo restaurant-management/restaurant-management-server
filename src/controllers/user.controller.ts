@@ -34,7 +34,7 @@ const getAll = async (_req: Request, res: Response, next: NextFunction) => {
 const getByUuid = async (req: Request, res: Response, next: NextFunction) => {
     if (!checkUserPermission(req['user'] as User, Permission.UserManagement) &&
         (req['user'] as User).uuid != req.params.uuid) {
-        return res.status(401).json({message: 'Unauthorized'});
+        return next(new Error('Unauthorized'));
     }
     UserService.getByUuid(req.params.uuid).then(value => {
         return res.status(200).json(value);

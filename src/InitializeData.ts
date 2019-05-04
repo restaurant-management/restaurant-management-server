@@ -20,12 +20,8 @@ const initializeData = async () => {
             .values([
                 {slug: 'user', name: 'User'},
                 {
-                    slug: 'administrator', name: 'Administrator', permissions: [
-                        Permission.CreateBill, Permission.DailyStorageManagement,
-                        Permission.DeleteBill, Permission.DishManagement,
-                        Permission.EditBill, Permission.RoleManagement,
-                        Permission.UpdateBillStatus, Permission.UserManagement
-                    ]
+                    slug: 'administrator', name: 'Administrator',
+                    permissions: Object.keys(Permission).map(per => Permission[per])
                 }
             ]).execute();
 

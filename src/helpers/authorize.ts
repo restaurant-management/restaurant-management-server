@@ -1,3 +1,5 @@
+/// Reference: https://jasonwatmore.com/post/2018/11/28/nodejs-role-based-authorization-tutorial-with-example-api#users-controller-js
+
 import {NextFunction, Request, Response} from 'express';
 import jwt from 'jsonwebtoken';
 import {User} from '../entities/User';
@@ -75,11 +77,13 @@ const checkPermission = (permission: string, userPermissions: string[]): boolean
 };
 
 /**
- * Internal function: User Permissions have some permissions, don't they?
+ * Internal function: User Permissions have one in some permissions, don't they?
  */
 const checkMultiplePermission = (permissions: string[], userPermissions: string[]): boolean => {
-    permissions.forEach(permission => {
-        if (!checkPermission(permission, userPermissions)) return false;
-    });
-    return true;
+    for (let permission of permissions) {
+        if (checkPermission(permission, userPermissions)) {
+            return true;
+        }
+    }
+    return false;
 };
