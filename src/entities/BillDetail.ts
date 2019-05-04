@@ -1,10 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from 'typeorm';
 import {Bill} from './Bill';
 import {Dish} from './Dish';
 
 @Entity()
-export class BillDetail {
-    @ManyToOne(_type => Bill, bill => bill.billDetails)
+export class BillDetail extends BaseEntity{
+    @ManyToOne(_type => Bill, bill => bill.billDetails, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'billId'})
     public bill: Bill;
 
@@ -18,6 +18,6 @@ export class BillDetail {
     @PrimaryColumn()
     public dishId: number;
 
-    @Column("int", {default: 0})
+    @Column("int", {default: 1})
     public quantity: number;
 }

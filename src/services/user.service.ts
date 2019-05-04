@@ -4,7 +4,7 @@ import {User} from '../entities/User';
 import * as passwordHandler from '../helpers/passwordHandler';
 
 const getAll = async () => {
-    const users = await User.find();
+    const users = await User.find({relations: ['role']});
     return users.map((user) => {
         const {password, userId, ...userWithoutPassword} = user;
         return userWithoutPassword;
