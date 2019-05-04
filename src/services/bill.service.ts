@@ -46,22 +46,14 @@ const findById = async (billId: number) => {
 };
 
 const deleteBill = async (billId: number) => {
-    try {
-        const bill = await Bill.findOne(billId);
-        const billDetails = await BillDetail.find({where: {billId}});
-        billDetails.forEach(async (billDetail) => await billDetail.remove());
-        await bill.remove();
-    } catch (e) {
-        throw e;
-    }
+    const bill = await Bill.findOne(billId);
+    const billDetails = await BillDetail.find({where: {billId}});
+    billDetails.forEach(async (billDetail) => await billDetail.remove());
+    await bill.remove();
 };
 
 const getAll = async (length?: number, offset?: number) => {
-    try {
-        return await Bill.find({skip: offset, take: length, relations: ['billDetails']});
-    } catch (e) {
-        throw e;
-    }
+    return await Bill.find({skip: offset, take: length, relations: ['billDetails']});
 };
 
 const addDish = async (dishId: number, billId: number) => {
