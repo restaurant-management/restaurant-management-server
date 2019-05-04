@@ -1,6 +1,6 @@
-import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {BillDetail} from './BillDetail';
-import {DailyDishDetail} from './DailyDishDetail';
+import {DailyDish} from './DailyDish';
 
 @Entity()
 export class Dish extends BaseEntity{
@@ -22,6 +22,6 @@ export class Dish extends BaseEntity{
     @OneToMany(_type => BillDetail, billDetail => billDetail.dish, {nullable: true})
     public billDetails: BillDetail[];
 
-    @ManyToOne(_type => DailyDishDetail, dailyDishDetail => dailyDishDetail.dishes, {nullable: true})
-    public dailyDishDetail: DailyDishDetail;
+    @OneToMany(_type => DailyDish, dailyDish => dailyDish.dish, {nullable: true})
+    public dailyDishes: DailyDish[];
 }

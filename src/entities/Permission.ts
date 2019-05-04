@@ -21,9 +21,9 @@ export enum Permission {
     DishManagement = 'dish-management',
 
     /**
-     * Permission about *daily storage*.
+     * Permission about *daily dish*.
      */
-    DailyStorageManagement = 'daily-storage-management',
+    DailyDishManagement = 'daily-dish-management',
 
 
 }
