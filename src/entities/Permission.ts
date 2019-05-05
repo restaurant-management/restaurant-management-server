@@ -13,6 +13,7 @@ export enum Permission {
      * Permission about *bill*.
      */
     BillManagement = 'bill-management',
+    CreateBill = 'create-bill',
     UpdateBillStatus = 'update-bill-status',
 
     /**

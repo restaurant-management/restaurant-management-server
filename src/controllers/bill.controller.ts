@@ -14,14 +14,14 @@ const create = (req: Request, res: Response, next: NextFunction) => {
 
 const createCustom = (req: Request, res: Response, next: NextFunction) => {
     BillService.create((req['user'] as User).userName, req.body.dishIds,
-        req.body.date || new Date(), req.body.status).then(bill => {
+        req.body.day || new Date(), req.body.status).then(bill => {
         const {billDetails, ...billWithoutDetail} = bill;
         return res.status(200).json(billWithoutDetail);
     }).catch(err => next(err));
 };
 
 const editBill = (req: Request, res: Response, next: NextFunction) => {
-    BillService.edit(req.params.billId,req.body.date || new Date(),
+    BillService.edit(req.params.billId,req.body.day || new Date(),
         req.body.status).then(bill => {
         return res.status(200).json(bill);
     }).catch(err => next(err));

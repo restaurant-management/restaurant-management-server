@@ -15,6 +15,7 @@ const create = async (_username: string, _dishIds: number[], _day?: Date, _statu
     newBill.day = _day || newBill.day;
     newBill.status = _status as BillStatus;
     newBill.billDetails = [];
+    if(!_dishIds) throw new Error('DishIds must be not null.');
     for (let dishId of _dishIds) {
         let dish = await Dish.findOne(dishId);
         let billDetail = new BillDetail();
@@ -33,6 +34,7 @@ const edit = async (_billId: number, _day?: Date, _status?: string) => {
         throw new Error('Bill Status not found.');
 
     let bill = await Bill.findOne(_billId);
+    if (!bill) throw new Error('Bill not found,');
     if (_day) bill.day = _day;
     if (_status) bill.status = _status as BillStatus;
     const billId = (await bill.save()).billId;
@@ -57,12 +59,13 @@ const getAll = async (length?: number, offset?: number) => {
 };
 
 const addDish = async (dishId: number, billId: number) => {
-    if (await BillDetail.findOne({dishId, billId}))
-        throw new Error('Dish existed in bill');
-    let billDetail = new BillDetail();
-
     const dish = await Dish.findOne(dishId);
     if (!dish) throw new Error('Dish not found.');
+
+    if (await BillDetail.findOne({dishId, billId}))
+        throw new Error('Dish existed in bill');
+
+    let billDetail = new BillDetail();
     billDetail.dish = dish;
 
     const bill = await Bill.findOne(billId);
