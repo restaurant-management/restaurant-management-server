@@ -4,6 +4,7 @@ import {User} from './User';
 
 export enum BillStatus {
     Created = 'created',
+    Paid = 'paid',
     Preparing = 'preparing',
     PrepareDone = 'prepare-done',
     Delivering = 'delivering',

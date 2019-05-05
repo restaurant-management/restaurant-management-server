@@ -23,7 +23,7 @@ app.use(logger('dev'));
 createConnection().then(async () => {
 
     await InitializeData();
-    app.use(router);
+    app.use('/api', router);
     app.use(errorHandler);
 
 }).catch((error) => console.log(error));

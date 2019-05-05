@@ -5,7 +5,7 @@ import Authorize from '../helpers/authorize';
 
 const router = Router();
 
-router.post('/', Authorize(), billController.create);
+router.post('/', Authorize([Permission.CreateBill, Permission.BillManagement]), billController.create);
 router.post('/custom', Authorize(Permission.BillManagement), billController.createCustom);
 router.put('/:billId', Authorize(Permission.BillManagement), billController.editBill);
 router.put('/:billId/status/:status', Authorize([Permission.BillManagement, Permission.UpdateBillStatus]),

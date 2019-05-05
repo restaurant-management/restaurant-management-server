@@ -1,10 +1,17 @@
 import {getConnection} from 'typeorm';
-import {Permission} from '../entities/Permission';
+import {Permission, PermissionArray} from '../entities/Permission';
 import {Role} from '../entities/Role';
 import stringToSlug from '../helpers/slugHandler';
 
 const create = async (_name: string, _slug?: string, _description?: string, _permissions?: string[]) => {
     if(!_slug) _slug = stringToSlug(_name);
+
+    if(_permissions){
+        for(let permission of _permissions){
+            if(PermissionArray.indexOf(permission) < 0)
+                throw new Error(`Permission "${permission}" not found.`);
+        }
+    }
 
     if (await Role.findOne({where: {slug: _slug}}))
         throw new Error('Role existed.');
@@ -59,6 +66,7 @@ const addPermission = async (slug: string, permission: string) => {
 
 const removePermission = async (slug: string, permission: string) => {
     let role = await Role.findOne({where: {slug}});
+    if (!role) throw new Error('Role not found.');
     let index = role.permissions.indexOf(permission);
     if (index > -1) role.permissions.splice(index, 1);
     return await role.save();

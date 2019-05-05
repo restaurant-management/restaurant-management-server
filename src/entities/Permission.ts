@@ -13,6 +13,7 @@ export enum Permission {
      * Permission about *bill*.
      */
     BillManagement = 'bill-management',
+    CreateBill = 'create-bill',
     UpdateBillStatus = 'update-bill-status',
 
     /**
@@ -25,5 +26,6 @@ export enum Permission {
      */
     DailyDishManagement = 'daily-dish-management',
 
-
 }
+
+export const PermissionArray = Object.keys(Permission).map(i => Permission[i]);

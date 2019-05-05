@@ -1,27 +1,23 @@
 import {getConnection} from 'typeorm';
 import {Dish} from '../entities/Dish';
 
-const create = async (_name: string, _description?: string, _images: string[] = [], _defaultPrice: number = 0) => {
+const create = async (_name: string, _description: string = '', _images: string[] = [], _defaultPrice: number = 0) => {
     let newDish = new Dish();
     newDish.name = _name;
     newDish.description = _description;
     newDish.images = _images;
     newDish.defaultPrice = _defaultPrice;
-    const dish = await newDish.save();
-
-    if (dish) return {dish};
-    return {};
+    return await newDish.save();
 };
 
-const update = async (dishId: number, _name: string, _description?: string, _images: string[] = [], _defaultPrice: number = 0) => {
+const update = async (dishId: number, _name?: string, _description?: string, _images?: string[], _defaultPrice?: number) => {
     let dish = await Dish.findOne(dishId);
-    dish.name = _name;
-    dish.description = _description;
-    dish.images = _images;
-    dish.defaultPrice = _defaultPrice;
-    const updated = await dish.save();
-    if (updated) return {dish: updated};
-    return {};
+    if (!dish) throw new Error('Dish not found.');
+    if (_name) dish.name = _name;
+    if (_description) dish.description = _description;
+    if (_images) dish.images = _images;
+    if (_defaultPrice) dish.defaultPrice = _defaultPrice;
+    return await dish.save();
 };
 
 const deleteDish = async (dishId: number) => {
@@ -29,14 +25,14 @@ const deleteDish = async (dishId: number) => {
         .delete().from(Dish)
         .where('dishId = :dishId', {dishId})
         .execute();
-    return result.affected >= 1;
+    if (result.affected < 1) throw new Error('Delete failed.');
 };
 
 const findById = async (dishId: number) => {
     const dish = await Dish.findOne(dishId);
 
-    if (dish) return {dish};
-    return {};
+    if (dish) return dish;
+    throw new Error('Not found.');
 };
 
 const getAll = async () => {
