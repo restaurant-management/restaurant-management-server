@@ -25,5 +25,6 @@ export enum Permission {
      */
     DailyDishManagement = 'daily-dish-management',
 
-
 }
+
+export const PermissionArray = Object.keys(Permission).map(i => Permission[i]);
