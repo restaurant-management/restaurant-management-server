@@ -54,14 +54,19 @@ const addPermission = async (slug: string, permission: string) => {
     let role = await Role.findOne({where: {slug}});
     if(!role.permissions) role.permissions = [];
     role.permissions.push(permission);
-    return await role.save();
+    const saved = await role.save();
+    if (!saved) throw new Error('Add permission failed.');
+    return saved;
 };
 
 const removePermission = async (slug: string, permission: string) => {
     let role = await Role.findOne({where: {slug}});
+    if (!role) throw new Error('Role not found.');
     let index = role.permissions.indexOf(permission);
     if (index > -1) role.permissions.splice(index, 1);
-    return await role.save();
+    const saved = await role.save();
+    if (!saved) throw new Error('Remove permission failed.');
+    return saved;
 };
 
 export {create, getAll, deleteRole, findBySlug, update, addPermission, removePermission}
