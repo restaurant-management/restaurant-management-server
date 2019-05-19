@@ -20,21 +20,25 @@ const authorize = (permission?: string | string[]) => {
 
             jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
                 if (err)
-                    next(err);
+                    return next(err);
 
-                let user = await User.findOne({
-                    where: {uuid: decoded['uuid']},
-                    relations: ['role']
-                });
+                try{
+                    let user = await User.findOne({
+                        where: {uuid: decoded['uuid']},
+                        relations: ['role']
+                    });
 
-                if (!user) return res.status(500).json({
-                    message: 'Failed to authenticate token.'
-                });
+                    if (!user) return res.status(500).json({
+                        message: 'Failed to authenticate token.'
+                    });
 
-                const {password, ...userWithoutPassword} = user;
+                    const {password, ...userWithoutPassword} = user;
 
-                req['user'] = userWithoutPassword;
-                next();
+                    req['user'] = userWithoutPassword;
+                    return next();
+                } catch(e) {
+                    return next(e)
+                }
             })
         },
 

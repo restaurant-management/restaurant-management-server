@@ -20,14 +20,14 @@ const getByUuid = async (uuid: string) => {
 };
 
 const getByUsername = async (username: string) => {
-    const user = await User.findOne({where: {userName: username}});
+    const user = await User.findOne({where: {userName: username}, relations: ['role']});
     if (!user) throw new Error('Not found.');
     const {password, ...userWithoutPassword} = user;
     return userWithoutPassword;
 };
 
 const getByEmail = async (email: string) => {
-    const user = await User.findOne({where: {email}});
+    const user = await User.findOne({where: {email}, relations: ['role']});
     if (!user) throw new Error('Not found.');
     const {password, ...userWithoutPassword} = user;
     return userWithoutPassword;
