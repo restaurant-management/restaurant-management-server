@@ -4,10 +4,11 @@ import {User} from '../entities/User';
 import {checkUserPermission} from '../helpers/authorize';
 import * as UserService from '../services/user.service';
 
-const register = async (req: Request, res: Response, _next: NextFunction) => {
-    let user = await UserService.createUser(req.body.username,
-        req.body.email, req.body.password, req.body.fullName, req.body.birthday);
-    return res.status(200).json(user);
+const register = async (req: Request, res: Response, next: NextFunction) => {
+    UserService.createUser(req.body.username,
+        req.body.email, req.body.password, req.body.fullName, req.body.birthday).then((user) => {
+            return res.status(200).json(user);
+        }).catch(err => next(err));
 };
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
