@@ -60,7 +60,7 @@ const createUser = async (_username: string, _email: string, _password: string, 
     newUser.password = passwordHandler.encode(_password);
     newUser.fullName = _fullName;
     newUser.birthday = _birthday;
-    newUser.role = await Role.findOne({where: {slug: 'user'}});
+    newUser.userRole = await Role.findOne({where: {slug: 'user'}});
 
     const user = await newUser.save();
     if (!user) throw new Error('Register failed.');
@@ -73,7 +73,7 @@ const deleteUser = async (username: string) => {
     const user = await User.findOne({where: {userName: username}});
 
     if (!user) throw new Error('User not found.');
-    if (user.role.slug === 'administrator') throw new Error('Can\'t delete user is administrator.');
+    if (user.userRole.slug === 'administrator') throw new Error('Can\'t delete user is administrator.');
 
     await user.remove();
 };
@@ -124,7 +124,7 @@ const changeRole = async (username: string, roleSlug: string) => {
     const user = await User.findOne({where: {userName: username}});
     if (!user) throw new Error('User not found.');
 
-    user.role = role;
+    user.userRole = role;
 
     const saved = await user.save();
     if (!saved) throw new Error('Change role failed.');

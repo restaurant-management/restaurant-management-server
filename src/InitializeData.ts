@@ -33,7 +33,7 @@ const initializeData = async () => {
         newUser.userName = 'admin';
         newUser.password = passwordHandler.encode('admin');
         newUser.email = 'hienlh1298@gmail.com';
-        newUser.role = await Role.findOne({where: {slug: 'administrator'}});
+        newUser.userRole = await Role.findOne({where: {slug: 'administrator'}});
         await newUser.save();
     }
 };
