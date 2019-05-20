@@ -1,3 +1,46 @@
+# Some Enum
+
+### Permission
+
+```
+role-management
+user-management
+bill-management
+create-bill
+update-bill-status
+dish-management
+daily-dish-management
+```
+
+### BillStatus
+
+```
+created
+paid
+preparing
+prepare-done
+delivering
+shipping
+complete
+```
+
+### DaySession
+
+```
+none
+morning
+noon
+afternoon
+evening
+```
+
+### TableStatus
+
+```
+free
+full
+```
+
 # User
 
 ### Register:
