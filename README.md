@@ -1,4 +1,4 @@
-# Some Enum
+# Some Enums
 
 ### Permission
 
@@ -32,6 +32,13 @@ morning
 noon
 afternoon
 evening
+```
+
+### DailyDishStatus
+
+```
+in-stock
+out-of-stock
 ```
 
 ### TableStatus
