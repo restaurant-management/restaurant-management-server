@@ -1,9 +1,11 @@
 import {BaseEntity, Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Bill} from './Bill';
+import {Comment} from './Comment';
+import {Favorite} from './Favorite';
 import {Role} from './Role';
 
 @Entity()
-export class User extends BaseEntity{
+export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     public userId: number;
@@ -21,6 +23,9 @@ export class User extends BaseEntity{
     @Column()
     public password: string;
 
+    @Column({nullable: true})
+    public avatar: string;
+
     @Column({length: 100, nullable: true})
     public fullName: string;
 
@@ -32,11 +37,20 @@ export class User extends BaseEntity{
 
     @ManyToOne(_type => Role, role => role.users)
     @JoinColumn({referencedColumnName: 'slug', name: 'role'})
-    public role: Role;
+    public userRole: Role;
+
+    @Column()
+    public role: string;
 
     @Column('text', {array: true, nullable: true})
     public permissions: string[];
 
     @OneToMany(_type => Bill, bill => bill.user, {nullable: true})
     public bills: Bill[];
+
+    @OneToMany(_type => Favorite, favorite => favorite.user)
+    public favorites: Favorite[];
+
+    @OneToMany(_type => Comment, comment => comment.user)
+    public comments: Comment[];
 }

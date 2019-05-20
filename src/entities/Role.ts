@@ -19,6 +19,6 @@ export class Role extends BaseEntity{
     @Column('text', {array: true, nullable: true})
     public permissions: string[];
 
-    @OneToMany(_type => User, user => user.role)
+    @OneToMany(_type => User, user => user.userRole)
     public users: User[];
 }

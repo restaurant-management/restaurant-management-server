@@ -5,7 +5,7 @@ import {User} from '../entities/User';
 import * as passwordHandler from '../helpers/passwordHandler';
 
 const getAll = async (length?: number, offset?: number) => {
-    const users = await User.find({relations: ['role'], take: length, skip: offset});
+    const users = await User.find({take: length, skip: offset});
     return users.map((user) => {
         const {password, userId, ...userWithoutPassword} = user;
         return userWithoutPassword;
@@ -20,14 +20,14 @@ const getByUuid = async (uuid: string) => {
 };
 
 const getByUsername = async (username: string) => {
-    const user = await User.findOne({where: {userName: username}, relations: ['role']});
+    const user = await User.findOne({where: {userName: username}});
     if (!user) throw new Error('Not found.');
     const {password, ...userWithoutPassword} = user;
     return userWithoutPassword;
 };
 
 const getByEmail = async (email: string) => {
-    const user = await User.findOne({where: {email}, relations: ['role']});
+    const user = await User.findOne({where: {email}});
     if (!user) throw new Error('Not found.');
     const {password, ...userWithoutPassword} = user;
     return userWithoutPassword;
@@ -60,7 +60,7 @@ const createUser = async (_username: string, _email: string, _password: string, 
     newUser.password = passwordHandler.encode(_password);
     newUser.fullName = _fullName;
     newUser.birthday = _birthday;
-    newUser.role = await Role.findOne({where: {slug: 'user'}});
+    newUser.userRole = await Role.findOne({where: {slug: 'user'}});
 
     const user = await newUser.save();
     if (!user) throw new Error('Register failed.');
@@ -69,11 +69,11 @@ const createUser = async (_username: string, _email: string, _password: string, 
 };
 
 const deleteUser = async (username: string) => {
-    if(username === 'admin') throw new Error('Can\'t delete default admin user.');
-    const user = await User.findOne({where: {userName: username}, relations: ['role']});
+    if (username === 'admin') throw new Error('Can\'t delete default admin user.');
+    const user = await User.findOne({where: {userName: username}});
 
     if (!user) throw new Error('User not found.');
-    if (user.role.slug === 'administrator') throw new Error('Can\'t delete user is administrator.');
+    if (user.userRole.slug === 'administrator') throw new Error('Can\'t delete user is administrator.');
 
     await user.remove();
 };
@@ -124,7 +124,7 @@ const changeRole = async (username: string, roleSlug: string) => {
     const user = await User.findOne({where: {userName: username}});
     if (!user) throw new Error('User not found.');
 
-    user.role = role;
+    user.userRole = role;
 
     const saved = await user.save();
     if (!saved) throw new Error('Change role failed.');

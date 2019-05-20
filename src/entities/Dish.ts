@@ -1,6 +1,8 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {BillDetail} from './BillDetail';
+import {Comment} from './Comment';
 import {DailyDish} from './DailyDish';
+import {Favorite} from './Favorite';
 
 @Entity()
 export class Dish extends BaseEntity{
@@ -24,4 +26,10 @@ export class Dish extends BaseEntity{
 
     @OneToMany(_type => DailyDish, dailyDish => dailyDish.dish, {nullable: true})
     public dailyDishes: DailyDish[];
+
+    @OneToMany(_type => Favorite, favorite => favorite.dish)
+    public favorites: Favorite[];
+
+    @OneToMany(_type => Comment, comment => comment.dish)
+    public comments: Comment[];
 }
