@@ -19,7 +19,7 @@ export class DailyDish extends BaseEntity{
     @PrimaryColumn({default: DaySession.None})
     public session: DaySession;
 
-    @ManyToOne(_type => Dish, dish => dish.dailyDishes)
+    @ManyToOne(_type => Dish, dish => dish.dailyDishes, {eager: true})
     @JoinColumn({name: 'dishId'})
     public dish: Dish;
 
