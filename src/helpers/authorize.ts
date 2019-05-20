@@ -25,7 +25,7 @@ const authorize = (permission?: string | string[]) => {
                 try{
                     let user = await User.findOne({
                         where: {uuid: decoded['uuid']},
-                        relations: ['role']
+                        relations: ['userRole']
                     });
 
                     if (!user) return res.status(500).json({
@@ -63,7 +63,7 @@ export default authorize;
 
 export const checkUserPermission = (user: User, permission: string | string[]): boolean => {
     const extraPermissions = user.permissions || [];
-    const rolePermissions = user.role.permissions || [];
+    const rolePermissions = user.userRole.permissions || [];
 
     const userPermissions = [...extraPermissions, ...rolePermissions];
     if (typeof permission === 'string') {
