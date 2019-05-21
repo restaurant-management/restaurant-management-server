@@ -3,11 +3,14 @@ import {BillDetail} from '../entities/BillDetail';
 import {Dish} from '../entities/Dish';
 import {User} from '../entities/User';
 
-const create = async (_username: string, _dishIds: number[], _day?: Date, _status?: string) => {
+const create = async (_username: string, _dishIds: number[], _quantities?: number[], _day?: Date, _status?: string) => {
     // Check status is correct
     if (_status &&
         Object.keys(BillStatus).map(i => BillStatus[i]).indexOf(_status) < 0)
         throw new Error('Bill Status not found.');
+
+    if(_quantities && _quantities.length !== _dishIds.length)
+        throw new Error('Number of DishIds have to equal with number of quantities.');
 
     const user = await User.findOne({where: {userName: _username}});
     let newBill = new Bill();
@@ -16,10 +19,11 @@ const create = async (_username: string, _dishIds: number[], _day?: Date, _statu
     newBill.status = _status as BillStatus;
     newBill.billDetails = [];
     if(!_dishIds) throw new Error('DishIds must be not null.');
-    for (let dishId of _dishIds) {
-        let dish = await Dish.findOne(dishId);
+    for (let i = 0; i < _dishIds.length; i++) {
+        let dish = await Dish.findOne(_dishIds[i]);
         let billDetail = new BillDetail();
         billDetail.dish = dish;
+        if(_quantities) billDetail.quantity = _quantities[i] > 0 ? _quantities[i] : 1;
         billDetail.bill = newBill;
         newBill.billDetails.push(billDetail);
     }

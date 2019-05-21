@@ -5,7 +5,8 @@ import {checkUserPermission} from '../helpers/authorize';
 import * as BillService from '../services/bill.service';
 
 const create = (req: Request, res: Response, next: NextFunction) => {
-    BillService.create((req['user'] as User).userName, req.body.dishIds, new Date())
+    BillService.create((req['user'] as User).userName, req.body.dishIds, 
+        req.body.quantities, new Date())
         .then(bill => {
             const {billDetails, ...billWithoutDetail} = bill;
             return res.status(200).json(billWithoutDetail);
@@ -13,11 +14,12 @@ const create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const createCustom = (req: Request, res: Response, next: NextFunction) => {
-    BillService.create((req['user'] as User).userName, req.body.dishIds,
-        req.body.day || new Date(), req.body.status).then(bill => {
-        const {billDetails, ...billWithoutDetail} = bill;
-        return res.status(200).json(billWithoutDetail);
-    }).catch(err => next(err));
+    BillService.create((req['user'] as User).userName, req.body.dishIds, 
+        req.body.quantities, req.body.day || new Date(), req.body.status)
+        .then(bill => {
+            const {billDetails, ...billWithoutDetail} = bill;
+            return res.status(200).json(billWithoutDetail);
+        }).catch(err => next(err));
 };
 
 const editBill = (req: Request, res: Response, next: NextFunction) => {
