@@ -28,7 +28,7 @@ const create = async (_username: string, _dishIds: number[], _quantities?: numbe
         newBill.billDetails.push(billDetail);
     }
     const billId = (await newBill.save()).billId;
-    return await Bill.findOne(billId);
+    return await Bill.findOne(billId, {relations: ['billDetails']});
 };
 
 const edit = async (_billId: number, _day?: Date, _status?: string) => {

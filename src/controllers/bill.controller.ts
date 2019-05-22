@@ -8,8 +8,7 @@ const create = (req: Request, res: Response, next: NextFunction) => {
     BillService.create((req['user'] as User).userName, req.body.dishIds, 
         req.body.quantities, new Date())
         .then(bill => {
-            const {billDetails, ...billWithoutDetail} = bill;
-            return res.status(200).json(billWithoutDetail);
+            return res.status(200).json(bill);
         }).catch(err => next(err));
 };
 
@@ -17,8 +16,7 @@ const createCustom = (req: Request, res: Response, next: NextFunction) => {
     BillService.create((req['user'] as User).userName, req.body.dishIds, 
         req.body.quantities, req.body.day || new Date(), req.body.status)
         .then(bill => {
-            const {billDetails, ...billWithoutDetail} = bill;
-            return res.status(200).json(billWithoutDetail);
+            return res.status(200).json(bill);
         }).catch(err => next(err));
 };
 
