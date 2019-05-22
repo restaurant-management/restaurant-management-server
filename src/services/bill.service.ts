@@ -28,7 +28,7 @@ const create = async (_username: string, _dishIds: number[], _quantities?: numbe
         newBill.billDetails.push(billDetail);
     }
     const billId = (await newBill.save()).billId;
-    return await Bill.findOne(billId, {relations: ['billDetails']});
+    return await Bill.findOne(billId, {relations: ['billDetails', 'username']});
 };
 
 const edit = async (_billId: number, _day?: Date, _status?: string) => {
@@ -46,7 +46,7 @@ const edit = async (_billId: number, _day?: Date, _status?: string) => {
 };
 
 const findById = async (billId: number) => {
-    const bill = await Bill.findOne(billId, {relations: ['billDetails']});
+    const bill = await Bill.findOne(billId, {relations: ['billDetails', 'user']});
     if (bill) return bill;
     throw new Error('Not found.');
 };

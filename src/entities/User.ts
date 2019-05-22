@@ -20,7 +20,7 @@ export class User extends BaseEntity {
     @Column({unique: true})
     public email: string;
 
-    @Column()
+    @Column({select: false})
     public password: string;
 
     @Column({nullable: true})
