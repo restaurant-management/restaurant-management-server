@@ -11,7 +11,7 @@ export class BillDetail extends BaseEntity{
     @PrimaryColumn()
     public billId: number;
 
-    @ManyToOne(_type => Dish, dish => dish.billDetails)
+    @ManyToOne(_type => Dish, dish => dish.billDetails, {eager: true})
     @JoinColumn({name: 'dishId'})
     public dish: Dish;
 
