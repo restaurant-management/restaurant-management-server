@@ -3,6 +3,7 @@ import {Permission} from '../entities/Permission';
 import {Role} from '../entities/Role';
 import {User} from '../entities/User';
 import * as passwordHandler from '../helpers/passwordHandler';
+import { getManager, getConnection } from 'typeorm';
 
 const getAll = async (length?: number, offset?: number) => {
     const users = await User.find({take: length, skip: offset});
@@ -22,21 +23,29 @@ const getByUuid = async (uuid: string) => {
 const getByUsername = async (username: string) => {
     const user = await User.findOne({where: {userName: username}});
     if (!user) throw new Error('Not found.');
-    const {password, ...userWithoutPassword} = user;
-    return userWithoutPassword;
+    return user;
 };
 
 const getByEmail = async (email: string) => {
     const user = await User.findOne({where: {email}});
     if (!user) throw new Error('Not found.');
-    const {password, ...userWithoutPassword} = user;
-    return userWithoutPassword;
+    return user;
 };
 
 const authenticate = async (usernameOrEmail: string, password: string) => {
-    let user = await User.findOne({where: {userName: usernameOrEmail}});
+    let user = await getConnection()
+    .createQueryBuilder()
+    .select("user")
+    .from(User, "user")
+    .where("user.userName = :username", { username: usernameOrEmail })
+    .addSelect("user.password").getOne();
     if (!user) {
-        user = await User.findOne({where: {email: usernameOrEmail}});
+        user = await getConnection()
+        .createQueryBuilder()
+        .select("user")
+        .from(User, "user")
+        .where("user.email = :email", { email: usernameOrEmail })
+        .addSelect("user.password").getOne();
     }
 
     if (user) {
