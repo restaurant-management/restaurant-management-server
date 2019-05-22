@@ -3,7 +3,7 @@ import {Permission} from '../entities/Permission';
 import {Role} from '../entities/Role';
 import {User} from '../entities/User';
 import * as passwordHandler from '../helpers/passwordHandler';
-import { getManager, getConnection } from 'typeorm';
+import { getConnection } from 'typeorm';
 
 const getAll = async (length?: number, offset?: number) => {
     const users = await User.find({take: length, skip: offset});
