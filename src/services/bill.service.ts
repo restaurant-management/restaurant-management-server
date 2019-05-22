@@ -28,7 +28,7 @@ const create = async (_username: string, _dishIds: number[], _quantities?: numbe
         newBill.billDetails.push(billDetail);
     }
     const billId = (await newBill.save()).billId;
-    return await Bill.findOne(billId, {relations: ['billDetails', 'username']});
+    return await Bill.findOne(billId, {relations: ['billDetails', 'user']});
 };
 
 const edit = async (_billId: number, _day?: Date, _status?: string) => {
@@ -42,7 +42,7 @@ const edit = async (_billId: number, _day?: Date, _status?: string) => {
     if (_day) bill.day = _day;
     if (_status) bill.status = _status as BillStatus;
     const billId = (await bill.save()).billId;
-    return await Bill.findOne(billId, {relations: ['billDetails']});
+    return await Bill.findOne(billId, {relations: ['billDetails', 'user']});
 };
 
 const findById = async (billId: number) => {
@@ -59,7 +59,7 @@ const deleteBill = async (billId: number) => {
 };
 
 const getAll = async (length?: number, offset?: number) => {
-    return await Bill.find({skip: offset, take: length, relations: ['billDetails']});
+    return await Bill.find({skip: offset, take: length, relations: ['billDetails', 'user']});
 };
 
 const addDish = async (dishId: number, billId: number) => {
@@ -78,7 +78,7 @@ const addDish = async (dishId: number, billId: number) => {
 
     await billDetail.save();
 
-    return await Bill.findOne(billId, {relations: ['billDetails']});
+    return await Bill.findOne(billId, {relations: ['billDetails', 'user']});
 };
 
 const removeDish = async (dishId: number, billId: number) => {
