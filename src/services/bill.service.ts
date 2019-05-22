@@ -3,7 +3,7 @@ import {BillDetail} from '../entities/BillDetail';
 import {Dish} from '../entities/Dish';
 import {User} from '../entities/User';
 
-const create = async (_username: string, _dishIds: number[], _quantities?: number[], _day?: Date, _status?: string) => {
+const create = async (_username: string, _dishIds: number[], _prices: number[], _quantities?: number[], _day?: Date, _status?: string) => {
     // Check status is correct
     if (_status &&
         Object.keys(BillStatus).map(i => BillStatus[i]).indexOf(_status) < 0)
@@ -11,6 +11,9 @@ const create = async (_username: string, _dishIds: number[], _quantities?: numbe
 
     if(_quantities && _quantities.length !== _dishIds.length)
         throw new Error('Number of DishIds have to equal with number of quantities.');
+
+    if(_prices.length !== _dishIds.length)
+        throw new Error('Number of DishIds have to equal with number of Prices.');
 
     const user = await User.findOne({where: {userName: _username}});
     let newBill = new Bill();
@@ -24,6 +27,7 @@ const create = async (_username: string, _dishIds: number[], _quantities?: numbe
         let billDetail = new BillDetail();
         billDetail.dish = dish;
         if(_quantities) billDetail.quantity = _quantities[i] > 0 ? _quantities[i] : 1;
+        billDetail.price = _prices[i];
         billDetail.bill = newBill;
         newBill.billDetails.push(billDetail);
     }

@@ -5,14 +5,18 @@ import {checkUserPermission} from '../helpers/authorize';
 import * as BillService from '../services/bill.service';
 
 const create = (req: Request, res: Response, next: NextFunction) => {
+    if(!(req['user'] as User).userName || !req.body.dishIds || !req.body.prices) 
+        return next(new Error('Missing body parameters.'));
     BillService.create((req['user'] as User).userName, req.body.dishIds, 
-        req.body.quantities, new Date())
+        req.body.prices, req.body.quantities, new Date())
         .then(bill => {
             return res.status(200).json(bill);
         }).catch(err => next(err));
 };
 
 const createCustom = (req: Request, res: Response, next: NextFunction) => {
+    if(!(req['user'] as User).userName || !req.body.dishIds || !req.body.prices) 
+        return next(new Error('Missing body parameters.'));
     BillService.create((req['user'] as User).userName, req.body.dishIds, 
         req.body.quantities, req.body.day || new Date(), req.body.status)
         .then(bill => {

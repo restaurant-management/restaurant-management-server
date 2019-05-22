@@ -20,4 +20,7 @@ export class BillDetail extends BaseEntity{
 
     @Column("int", {default: 1})
     public quantity: number;
+
+    @Column("int")
+    public price: number;
 }
