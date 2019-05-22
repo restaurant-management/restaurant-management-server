@@ -208,7 +208,8 @@ full
 `POST /api/bills`
 
 **Need Token**
-**body:** dishIds, quantities? (quantities.length have to equal dishIds.length)
+
+**body:** dishIds, prices, quantities? (quantities.length, prices.length have to equal dishIds.length)
 
 ### Create custom bill (for Admin/Moderator)
 
