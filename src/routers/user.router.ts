@@ -10,6 +10,7 @@ router.post('/login', userController.login);
 router.get('/uuid/:uuid', Authorize(), userController.getByUuid);
 router.get('/:username', Authorize(), userController.getByUsername);
 router.put('/:username', Authorize(), userController.editProfile);
+router.put('/:username/password', Authorize(), userController.editPassword);
 router.delete('/:username', Authorize(Permission.UserManagement), userController.deleteUser);
 router.get('/email/:email', Authorize(), userController.getByEmail);
 router.get('/', Authorize(Permission.UserManagement), userController.getAll);

@@ -74,6 +74,30 @@ const editProfile = async (req: Request, res: Response, next: NextFunction) => {
         }).catch(e => next(e));
 };
 
+const editPassword = async (req: Request, res: Response, next: NextFunction) => {
+    if(!req.body.newPassword) return next(new Error('New password is required.'));
+
+    if (!checkUserPermission(req['user'] as User, Permission.UserManagement) &&
+        (req['user'] as User).userName != req.params.username) {
+        return next(new Error('Unauthorized'));
+    }
+
+    // If user don't have permission, user need to be himself and supply correctly old
+    // password to add new password.
+    if(!checkUserPermission(req['user'] as User, Permission.UserManagement)){
+        if((req['user'] as User).userName == req.params.username) {
+            if(!req.body.oldPassword) return next(new Error('Old password is required.'));
+            if(!await UserService.checkCorrectPassword(req.params.username, req.body.oldPassword)){
+                return next(new Error('Password is not correct.'));
+            }
+        }
+    }
+
+    UserService.editPassword(req.params.username, req.body.newPassword).then(() => {
+        return res.status(200).json({message: 'Change password success.'});
+    }).catch(e => next(e));;
+};
+
 const addPermission = (req: Request, res: Response,  next: NextFunction) => {
     UserService.addPermission(req.params.username, req.params.permission).then(user => {
         return res.status(200).json(user);
@@ -92,7 +116,7 @@ const changeRole = (req: Request, res: Response,  next: NextFunction) => {
     }).catch(e => next(e))
 };
 
-export {register, login, getAll, getByUuid, getByUsername, getByEmail,
+export {register, login, getAll, getByUuid, getByUsername, getByEmail, editPassword,
     deleteUser, editProfile, addPermission, removePermission, changeRole}
 
 

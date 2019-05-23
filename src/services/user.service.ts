@@ -7,17 +7,13 @@ import { getConnection } from 'typeorm';
 
 const getAll = async (length?: number, offset?: number) => {
     const users = await User.find({take: length, skip: offset});
-    return users.map((user) => {
-        const {password, userId, ...userWithoutPassword} = user;
-        return userWithoutPassword;
-    })
+    return users;
 };
 
 const getByUuid = async (uuid: string) => {
     const user = await User.findOne({where: {uuid}});
     if (!user) throw new Error('Not found.');
-    const {password, ...userWithoutPassword} = user;
-    return userWithoutPassword;
+    return user;
 };
 
 const getByUsername = async (username: string) => {
@@ -56,6 +52,19 @@ const authenticate = async (usernameOrEmail: string, password: string) => {
     throw new Error('Username or email incorrect.');
 };
 
+const checkCorrectPassword = async (username: string, password: string) => {
+    let user = await getConnection()
+    .createQueryBuilder()
+    .select("user")
+    .from(User, "user")
+    .where("user.userName = :username", { username: username })
+    .addSelect("user.password").getOne();
+
+    if(!user) throw new Error('User not found.');
+
+    return passwordHandler.compare(password, user.password);
+}
+
 const createUser = async (_username: string, _email: string, _password: string, _fullName?: string, _birthday?: Date) => {
     const userSameUsername = await User.findOne({where: {userName: _username}});
     const userSameEmail = await User.findOne({where: {email: _email}});
@@ -73,8 +82,7 @@ const createUser = async (_username: string, _email: string, _password: string, 
 
     const user = await newUser.save();
     if (!user) throw new Error('Register failed.');
-    const {password, userId, ...userWithoutPassword} = user;
-    return userWithoutPassword;
+    return user;
 };
 
 const deleteUser = async (username: string) => {
@@ -101,6 +109,23 @@ const editProfile = async (username: string, newEmail?: string, newFullName?: st
     if (!saved) throw new Error('Edit user profile failed.');
     return saved;
 };
+
+const editPassword = async (username: string, newPassword: string) => {
+    let user = await getConnection()
+    .createQueryBuilder()
+    .select("user")
+    .from(User, "user")
+    .where("user.userName = :username", { username: username })
+    .addSelect("user.password").getOne();
+
+    if (!user) throw new Error('User not found.');
+
+    user.password = passwordHandler.encode(newPassword);
+
+    const saved = await user.save();
+    if (!saved) throw new Error('Edit user password failed.');
+    return saved;
+}
 
 const addPermission = async (username: string, permission: string) => {
     if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
@@ -151,5 +176,7 @@ export {
     editProfile,
     addPermission,
     removePermission,
-    changeRole
+    changeRole,
+    editPassword,
+    checkCorrectPassword
 };
