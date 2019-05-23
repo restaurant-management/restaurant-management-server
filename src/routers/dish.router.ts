@@ -11,9 +11,4 @@ router.get('/:dishId', authorize(Permission.DishManagement), dishController.getB
 router.put('/:dishId', authorize(Permission.DishManagement), dishController.update);
 router.get('/', authorize(Permission.DishManagement), dishController.getAll);
 
-// Default Get.
-router.get('*', (_req, res) => {
-    res.status(200).send('Welcome to Dish!');
-});
-
 export default router;

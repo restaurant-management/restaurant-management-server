@@ -16,9 +16,4 @@ router.delete('/:billId', Authorize(Permission.BillManagement), billController.d
 router.post('/:billId/dishes/:dishId', Authorize(Permission.BillManagement), billController.addDish);
 router.delete('/:billId/dishes/:dishId', Authorize(Permission.BillManagement), billController.removeDish);
 
-// Default Get.
-router.get('*', (_req, res) => {
-    res.status(200).send('Welcome to Bill!');
-});
-
 export default router;

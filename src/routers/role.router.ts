@@ -13,9 +13,4 @@ router.delete('/:slug', Authorize(Permission.RoleManagement), roleController.del
 router.post('/:slug/permissions/:permission', Authorize(Permission.RoleManagement), roleController.addPermission);
 router.delete('/:slug/permissions/:permission', Authorize(Permission.RoleManagement), roleController.removePermission);
 
-// Default Get.
-router.get('*', (_req, res) => {
-    res.status(200).send('Welcome to User!');
-});
-
 export default router;

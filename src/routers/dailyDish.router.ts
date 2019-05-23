@@ -11,9 +11,4 @@ router.put('/',authorize(Permission.DailyDishManagement) , dailyDishController.e
 router.get('/', dailyDishController.getAll);
 router.get('/getBy', dailyDishController.getBy);
 
-// Default Get.
-router.get('*', (_req, res) => {
-    res.status(200).send('Welcome to Dish!');
-});
-
 export default router;
