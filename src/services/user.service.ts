@@ -87,7 +87,7 @@ const deleteUser = async (username: string) => {
     await user.remove();
 };
 
-const editProfile = async (username: string, newEmail?: string, newFullName?: string, newBirthday?: Date) => {
+const editProfile = async (username: string, newEmail?: string, newFullName?: string, newBirthday?: Date, newAvatar?: string) => {
     const user = await User.findOne({where: {userName: username}});
 
     if (!user) throw new Error('User not found.');
@@ -95,11 +95,11 @@ const editProfile = async (username: string, newEmail?: string, newFullName?: st
     if (newEmail) user.email = newEmail;
     if (newFullName) user.fullName = newFullName;
     if (newBirthday) user.birthday = newBirthday;
+    if (newAvatar) user.avatar = newAvatar;
 
     const saved = await user.save();
     if (!saved) throw new Error('Edit user profile failed.');
-    const {password, userId, ...userWithoutPassword} = saved;
-    return userWithoutPassword;
+    return saved;
 };
 
 const addPermission = async (username: string, permission: string) => {

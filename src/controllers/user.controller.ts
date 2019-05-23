@@ -67,7 +67,8 @@ const editProfile = async (req: Request, res: Response, next: NextFunction) => {
         return next(new Error('Unauthorized'));
     }
 
-    UserService.editProfile(req.params.username, req.body.email, req.body.fullName, req.body.birthday)
+    UserService.editProfile(req.params.username, req.body.email, req.body.fullName, 
+        req.body.birthday, req.body.avatar)
         .then((user) => {
             return res.status(200).json(user);
         }).catch(e => next(e));
