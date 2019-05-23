@@ -84,7 +84,9 @@ full
 
 `PUT /api/users/:username`
 
-**body:** email?, fullName?, birthday?
+**Need token with permission:** user-management or login with user have username equal to query param username
+
+**body:** email?, fullName?, birthday?, avatar?
 
 ### Add permission:
 
