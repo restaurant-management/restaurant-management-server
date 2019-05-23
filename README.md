@@ -84,9 +84,19 @@ full
 
 `PUT /api/users/:username`
 
-**Need token with permission:** user-management or login with user have username equal to query param username
+**Need token with permission:** `user-management` or login with user have username equal to query param username
 
 **body:** email?, fullName?, birthday?, avatar?
+
+### Change password:
+
+`PUT /api/users/:username/password`
+
+**Need token with permission:** `user-management` and don't need old password.
+
+**If token don't have that permission:** User of token have to be user in param and old password is required.
+
+**body:** newPassword, oldPassword?
 
 ### Add permission:
 
