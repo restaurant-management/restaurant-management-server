@@ -66,8 +66,18 @@ const deleteBill = async (billId: number) => {
     await bill.remove();
 };
 
-const getAll = async (length?: number, offset?: number) => {
-    return await Bill.find({skip: offset, take: length, relations: ['billDetails', 'user']});
+const getAll = async (length?: number, offset?: number, createdBill: boolean = false, 
+    paidBill: boolean  = false, preparingBill: boolean = false, prepareDoneBill: boolean = false,
+    deliveringBill: boolean = false, completeBill: boolean = false) => {
+    let result = [];
+    var listBills = await Bill.find({skip: offset, take: length, relations: ['billDetails', 'user']});
+    if(createdBill) result = [...listBills.filter((e) => e.status === BillStatus.Created)];
+    if(paidBill) result = [...listBills.filter((e) => e.status === BillStatus.Paid)];
+    if(preparingBill) result = [...listBills.filter((e) => e.status === BillStatus.Preparing)];
+    if(prepareDoneBill) result = [...listBills.filter((e) => e.status === BillStatus.PrepareDone)];
+    if(deliveringBill) result = [...listBills.filter((e) => e.status === BillStatus.Delivering)];
+    if(completeBill) result = [...listBills.filter((e) => e.status === BillStatus.Complete)];
+    return result;
 };
 
 const addDish = async (dishId: number, billId: number) => {

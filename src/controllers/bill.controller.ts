@@ -48,7 +48,18 @@ const deleteBill = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAll = (req: Request, res: Response, next: NextFunction) => {
-    BillService.getAll(req.query.length, req.query.offset).then((bills) => {
+    BillService.getAll(req.query.length, req.query.offset, 
+        checkUserPermission(req['user'] as User, Permission.BillManagement) || 
+        checkUserPermission(req['user'] as User, Permission.UpdatePaidBillStatus),
+        checkUserPermission(req['user'] as User, Permission.BillManagement) ||
+        checkUserPermission(req['user'] as User, Permission.UpdatePreparingBillStatus),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+        checkUserPermission(req['user'] as User, Permission.BillManagement) ||
+        checkUserPermission(req['user'] as User, Permission.UpdateDeliveringBillStatus),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+    )
+    .then((bills) => {
         return res.status(200).json(bills);
     }).catch(err => next(err));
 };
