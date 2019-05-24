@@ -98,6 +98,17 @@ const editPassword = async (req: Request, res: Response, next: NextFunction) => 
     }).catch(e => next(e));;
 };
 
+const getAllPermissions = (req: Request, res: Response,  next: NextFunction) => { 
+    if (!checkUserPermission(req['user'] as User, Permission.UserManagement) &&
+        (req['user'] as User).userName != req.params.username) {
+        return next(new Error('Unauthorized'));
+    }
+
+    UserService.getAllPermissions(req.params.username).then(user => {
+        return res.status(200).json(user);
+    }).catch(e => next(e))
+}
+
 const addPermission = (req: Request, res: Response,  next: NextFunction) => {
     UserService.addPermission(req.params.username, req.params.permission).then(user => {
         return res.status(200).json(user);
@@ -117,6 +128,6 @@ const changeRole = (req: Request, res: Response,  next: NextFunction) => {
 };
 
 export {register, login, getAll, getByUuid, getByUsername, getByEmail, editPassword,
-    deleteUser, editProfile, addPermission, removePermission, changeRole}
+    deleteUser, editProfile, addPermission, removePermission, changeRole, getAllPermissions}
 
 
