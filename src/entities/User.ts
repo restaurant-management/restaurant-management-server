@@ -48,6 +48,9 @@ export class User extends BaseEntity {
     @OneToMany(_type => Bill, bill => bill.user, {nullable: true})
     public bills: Bill[];
 
+    @OneToMany(_type => Bill, bill => bill.manager, {nullable: true})
+    public billManagers: Bill[];
+
     @OneToMany(_type => Favorite, favorite => favorite.user)
     public favorites: Favorite[];
 

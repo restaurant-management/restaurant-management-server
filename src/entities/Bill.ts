@@ -8,7 +8,7 @@ export enum BillStatus {
     Preparing = 'preparing',
     PrepareDone = 'prepare-done',
     Delivering = 'delivering',
-    Shiping = 'shipping',
+    Shipping = 'shipping',
     Complete = 'complete'
 }
 
@@ -33,6 +33,13 @@ export class Bill extends BaseEntity{
 
     @Column()
     public username: string;
+
+    @ManyToOne(_type => User, user => user.billManagers, {nullable: true})
+    @JoinColumn({name: 'managerUsername', referencedColumnName: 'userName'})
+    public manager: User;
+
+    @Column({nullable: true})
+    public managerUsername: string;
 
     @OneToMany(_type => BillDetail, billDetail => billDetail.bill,
         {cascade: true})
