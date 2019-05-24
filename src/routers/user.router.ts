@@ -14,6 +14,7 @@ router.put('/:username/password', Authorize(), userController.editPassword);
 router.delete('/:username', Authorize(Permission.UserManagement), userController.deleteUser);
 router.get('/email/:email', Authorize(), userController.getByEmail);
 router.get('/', Authorize(Permission.UserManagement), userController.getAll);
+router.get('/:username/permissions', Authorize(), userController.getAllPermissions);
 router.post('/:username/permissions/:permission', Authorize(Permission.UserManagement), userController.addPermission);
 router.delete('/:username/permissions/:permission', Authorize(Permission.UserManagement), userController.removePermission);
 router.put('/:username/role/:role', Authorize(Permission.UserManagement), userController.changeRole);

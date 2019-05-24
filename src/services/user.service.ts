@@ -127,11 +127,27 @@ const editPassword = async (username: string, newPassword: string) => {
     return saved;
 }
 
+const getAllPermissions = async (username: string) => {
+    let result = [];
+
+    let user = await User.findOne({where: {userName: username}});
+    if (!user) throw new Error('User not found.');
+
+    if (user.permissions) result = [...user.permissions];
+
+    let role = await Role.findOne({where: {slug: user.role}});
+    if(role && role.permissions) result = [...role.permissions];
+
+    return result;
+};
+
 const addPermission = async (username: string, permission: string) => {
     if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
         throw new Error('Permission not found.');
 
     let user = await User.findOne({where: {userName: username}});
+    if (!user) throw new Error('User not found.');
+
     if (!user.permissions) user.permissions = [];
     user.permissions.push(permission);
     const saved = await user.save();
@@ -178,5 +194,6 @@ export {
     removePermission,
     changeRole,
     editPassword,
-    checkCorrectPassword
+    checkCorrectPassword,
+    getAllPermissions
 };
