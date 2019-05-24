@@ -71,12 +71,13 @@ const getAll = async (length?: number, offset?: number, createdBill: boolean = f
     deliveringBill: boolean = false, completeBill: boolean = false) => {
     let result = [];
     var listBills = await Bill.find({skip: offset, take: length, relations: ['billDetails', 'user']});
-    if(createdBill) result = [...listBills.filter((e) => e.status === BillStatus.Created)];
-    if(paidBill) result = [...listBills.filter((e) => e.status === BillStatus.Paid)];
-    if(preparingBill) result = [...listBills.filter((e) => e.status === BillStatus.Preparing)];
-    if(prepareDoneBill) result = [...listBills.filter((e) => e.status === BillStatus.PrepareDone)];
-    if(deliveringBill) result = [...listBills.filter((e) => e.status === BillStatus.Delivering)];
-    if(completeBill) result = [...listBills.filter((e) => e.status === BillStatus.Complete)];
+    if(createdBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Created)];
+    console.log(result);
+    if(paidBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Paid)];
+    if(preparingBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Preparing)];
+    if(prepareDoneBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.PrepareDone)];
+    if(deliveringBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Delivering)];
+    if(completeBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Complete)];
     return result;
 };
 
