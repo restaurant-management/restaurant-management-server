@@ -147,7 +147,8 @@ const getAllUserBills = async (
   var listManageBill = await Bill.find({
     skip: offset,
     take: length,
-    where: { managerUsername: username }
+    where: { managerUsername: username },
+    relations: ["billDetails", "user"]
   });
   var result = listOwnerBill;
   listManageBill.forEach(e => {
