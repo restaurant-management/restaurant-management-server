@@ -72,7 +72,6 @@ const getAll = async (length?: number, offset?: number, createdBill: boolean = f
     let result = [];
     var listBills = await Bill.find({skip: offset, take: length, relations: ['billDetails', 'user']});
     if(createdBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Created)];
-    console.log(result);
     if(paidBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Paid)];
     if(preparingBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.Preparing)];
     if(prepareDoneBill) result = [...result, ...listBills.filter((e) => e.status === BillStatus.PrepareDone)];
