@@ -7,7 +7,12 @@ role-management
 user-management
 bill-management
 create-bill
-update-bill-status
+update-preparing-bill-status
+update-paid-bill-status
+update-prepare-done-bill-status
+update-delivering-bill-status
+update-shipping-bill-status
+update-Complete-bill-status
 dish-management
 daily-dish-management
 ```
@@ -237,9 +242,21 @@ full
 
 ### Update bill status
 
-`PUT /api/bills/:dishId/status/:status`
+ **Just apply for bill-management**
 
-`PUT /api/bills/5/status/paid`
+`PUT /api/bills/:billId/created`
+
+**Need corresponding permission:**
+
+`PUT /api/bills/:billId/paid`
+
+`PUT /api/bills/:billId/preparing`
+
+`PUT /api/bills/:billId/prepare-done`
+
+`PUT /api/bills/:billId/shipping`
+
+`PUT /api/bills/:billId/complete`
 
 ### Get bill
 
