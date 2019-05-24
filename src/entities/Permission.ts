@@ -14,7 +14,12 @@ export enum Permission {
      */
     BillManagement = 'bill-management',
     CreateBill = 'create-bill',
-    UpdateBillStatus = 'update-bill-status',
+    UpdatePreparingBillStatus = 'update-preparing-bill-status',
+    UpdatePaidBillStatus = 'update-paid-bill-status',
+    UpdatePrepareDoneBillStatus = 'update-prepare-done-bill-status',
+    UpdateDeliveringBillStatus = 'update-delivering-bill-status',
+    UpdateShippingBillStatus = 'update-shipping-bill-status',
+    UpdateCompleteBillStatus = 'update-Complete-bill-status',
 
     /**
      * Permission about *dish*.
