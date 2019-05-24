@@ -61,6 +61,18 @@ const getAll = (req: Request, res: Response, next: NextFunction) => {
     }).catch(err => next(err));
 };
 
+const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
+    if (!checkUserPermission(req['user'] as User, Permission.BillManagement) &&
+        (req['user'] as User).userName != req.params.username) {
+        return next(new Error('Unauthorized'));
+    }
+
+    BillService.getAllUserBills(req.params.username, req.query.length, req.query.offset)
+    .then((bills) => {
+        return res.status(200).json(bills);
+    }).catch(err => next(err));
+};
+
 const addDish = (req: Request, res: Response, next: NextFunction) => {
     BillService.addDish(req.params.dishId, req.params.billId).then((bill) => {
         return res.status(200).json(bill);
@@ -137,5 +149,6 @@ export {
     updateShippingStatus,
     updateCompleteStatus,
     updatePaidStatus,
-    updateCreatedStatus
+    updateCreatedStatus,
+    getAllUserBills
 }

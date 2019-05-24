@@ -66,10 +66,11 @@ router.get(
     Permission.UpdatePreparingBillStatus,
     Permission.UpdatePrepareDoneBillStatus,
     Permission.UpdateDeliveringBillStatus,
-    Permission.UpdateCompleteBillStatus,
+    Permission.UpdateCompleteBillStatus
   ]),
   billController.getAll
 );
+router.get("/user/:username", Authorize(), billController.getAllUserBills);
 router.get("/:billId", Authorize(), billController.getById);
 router.delete(
   "/:billId",
