@@ -136,7 +136,11 @@ const getAllPermissions = async (username: string) => {
     if (user.permissions) result = [...user.permissions];
 
     let role = await Role.findOne({where: {slug: user.role}});
-    if(role && role.permissions) result = [...role.permissions];
+    if(role && role.permissions) 
+        role.permissions.forEach(per => {
+            if(result.indexOf(per) < 0) 
+                result.push(per);}
+            );
 
     return result;
 };

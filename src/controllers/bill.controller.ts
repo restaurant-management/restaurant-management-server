@@ -48,7 +48,27 @@ const deleteBill = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAll = (req: Request, res: Response, next: NextFunction) => {
-    BillService.getAll(req.query.length, req.query.offset).then((bills) => {
+    BillService.getAll(req.query.length, req.query.offset, 
+        checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePaidBillStatus]),
+        checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePreparingBillStatus]),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+        checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdateDeliveringBillStatus]),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+        checkUserPermission(req['user'] as User, Permission.BillManagement),
+    )
+    .then((bills) => {
+        return res.status(200).json(bills);
+    }).catch(err => next(err));
+};
+
+const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
+    if (!checkUserPermission(req['user'] as User, Permission.BillManagement) &&
+        (req['user'] as User).userName != req.params.username) {
+        return next(new Error('Unauthorized'));
+    }
+
+    BillService.getAllUserBills(req.params.username, req.query.length, req.query.offset)
+    .then((bills) => {
         return res.status(200).json(bills);
     }).catch(err => next(err));
 };
@@ -129,5 +149,6 @@ export {
     updateShippingStatus,
     updateCompleteStatus,
     updatePaidStatus,
-    updateCreatedStatus
+    updateCreatedStatus,
+    getAllUserBills
 }
