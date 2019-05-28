@@ -220,6 +220,14 @@ full
 
 `GET /api/bills`
 
+**query:** length?, offset?
+
+### Get all user bill
+
+`GET /api/bills/user/:username`
+
+**query:** length?, offset?
+
 ### Create bill
 
 `POST /api/bills`
