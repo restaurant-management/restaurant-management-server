@@ -60,8 +60,11 @@ const addPermission = async (slug: string, permission: string) => {
 
     let role = await Role.findOne({where: {slug}});
     if(!role.permissions) role.permissions = [];
-    role.permissions.push(permission);
-    return await role.save();
+    if(role.permissions.indexOf(permission) < 0) {
+        role.permissions.push(permission);
+        return await role.save();
+    }
+    return role;
 };
 
 const removePermission = async (slug: string, permission: string) => {

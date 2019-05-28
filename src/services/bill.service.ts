@@ -53,20 +53,11 @@ const create = async (
   return await findOneBill(billId);
 };
 
-const edit = async (_billId: number, _day?: Date, _status?: string) => {
-  // Check status is correct
-  if (
-    _status &&
-    Object.keys(BillStatus)
-      .map(i => BillStatus[i])
-      .indexOf(_status) < 0
-  )
-    throw new Error("Bill Status not found.");
+const edit = async (_billId: number, _day?: Date) => {
 
   let bill = await Bill.findOne(_billId);
   if (!bill) throw new Error("Bill not found,");
   if (_day) bill.day = _day;
-  if (_status) bill.status = _status as BillStatus;
   const billId = (await bill.save()).billId;
   return await findOneBill(billId);
 };
