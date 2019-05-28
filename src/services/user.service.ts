@@ -153,10 +153,14 @@ const addPermission = async (username: string, permission: string) => {
     if (!user) throw new Error('User not found.');
 
     if (!user.permissions) user.permissions = [];
-    user.permissions.push(permission);
-    const saved = await user.save();
-    if (!saved) throw new Error('Add permission failed.');
-    return saved;
+    if (user.permissions.indexOf(permission) < 0) 
+    {   
+        user.permissions.push(permission);
+        const saved = await user.save();
+        if (!saved) throw new Error('Add permission failed.');
+        return saved;
+    }
+    return user;
 };
 
 const removePermission = async (username: string, permission: string) => {
