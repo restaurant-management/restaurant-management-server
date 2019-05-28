@@ -1,4 +1,4 @@
-# Some Enum
+# Some Enums
 
 ### Permission
 
@@ -7,7 +7,12 @@ role-management
 user-management
 bill-management
 create-bill
-update-bill-status
+update-preparing-bill-status
+update-paid-bill-status
+update-prepare-done-bill-status
+update-delivering-bill-status
+update-shipping-bill-status
+update-Complete-bill-status
 dish-management
 daily-dish-management
 ```
@@ -32,6 +37,13 @@ morning
 noon
 afternoon
 evening
+```
+
+### DailyDishStatus
+
+```
+in-stock
+out-of-stock
 ```
 
 ### TableStatus
@@ -77,7 +89,19 @@ full
 
 `PUT /api/users/:username`
 
-**body:** email?, fullName?, birthday?
+**Need token with permission:** `user-management` or login with user have username equal to query param username
+
+**body:** email?, fullName?, birthday?, avatar?
+
+### Change password:
+
+`PUT /api/users/:username/password`
+
+**Need token with permission:** `user-management` and don't need old password.
+
+**If token don't have that permission:** User of token have to be user in param and old password is required.
+
+**body:** newPassword, oldPassword?
 
 ### Add permission:
 
@@ -196,11 +220,21 @@ full
 
 `GET /api/bills`
 
+**query:** length?, offset?
+
+### Get all user bill
+
+`GET /api/bills/user/:username`
+
+**query:** length?, offset?
+
 ### Create bill
 
 `POST /api/bills`
 
-**body:** dishIds
+**Need Token**
+
+**body:** dishIds, prices, quantities? (quantities.length, prices.length have to equal dishIds.length)
 
 ### Create custom bill (for Admin/Moderator)
 
@@ -216,9 +250,21 @@ full
 
 ### Update bill status
 
-`PUT /api/bills/:dishId/status/:status`
+ **Just apply for bill-management**
 
-`PUT /api/bills/5/status/paid`
+`PUT /api/bills/:billId/created`
+
+**Need corresponding permission:**
+
+`PUT /api/bills/:billId/paid`
+
+`PUT /api/bills/:billId/preparing`
+
+`PUT /api/bills/:billId/prepare-done`
+
+`PUT /api/bills/:billId/shipping`
+
+`PUT /api/bills/:billId/complete`
 
 ### Get bill
 
