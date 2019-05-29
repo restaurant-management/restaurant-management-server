@@ -73,7 +73,8 @@ const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const addDish = (req: Request, res: Response, next: NextFunction) => {
-    BillService.addDish(req.params.dishId, req.params.billId).then((bill) => {
+    if(!req.body.price) return next(new Error('Price is required.'))
+    BillService.addDish(req.params.dishId, req.params.billId, req.body.price).then((bill) => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
 };

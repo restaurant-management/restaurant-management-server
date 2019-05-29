@@ -2,6 +2,7 @@ import { Bill, BillStatus } from "../entities/Bill";
 import { BillDetail } from "../entities/BillDetail";
 import { Dish } from "../entities/Dish";
 import { User } from "../entities/User";
+import { DailyDish } from "../entities/DailyDish";
 
 const findOneBill = async (billId: number) => {
   return await Bill.findOne(billId, { relations: ["billDetails", "user"] });
@@ -40,6 +41,12 @@ const create = async (
   newBill.billDetails = [];
   if (!_dishIds) throw new Error("DishIds must be not null.");
   for (let i = 0; i < _dishIds.length; i++) {
+    const listDishes = await DailyDish.find({ where: {dishId: _dishIds[i]}})
+    if(!listDishes.find(e => new Date(e.day).getDate() == newBill.day.getDate() 
+      && new Date(e.day).getMonth() == newBill.day.getMonth() 
+      && new Date(e.day).getFullYear() == newBill.day.getFullYear()))
+      throw new Error(`This dish isn't sell on ${newBill.day.toDateString()}.`);
+
     let dish = await Dish.findOne(_dishIds[i]);
     let billDetail = new BillDetail();
     billDetail.dish = dish;
@@ -148,7 +155,7 @@ const getAllUserBills = async (
   return result;
 };
 
-const addDish = async (dishId: number, billId: number) => {
+const addDish = async (dishId: number, billId: number, price: number) => {
   const dish = await Dish.findOne(dishId);
   if (!dish) throw new Error("Dish not found.");
 
@@ -160,7 +167,15 @@ const addDish = async (dishId: number, billId: number) => {
 
   const bill = await Bill.findOne(billId);
   if (!bill) throw new Error("Bill not found.");
+
+  const listDishes = await DailyDish.find({ where: {dishId}})
+  if(!listDishes.find(e => new Date(e.day).getDate() == bill.day.getDate() 
+    && new Date(e.day).getMonth() == bill.day.getMonth() 
+    && new Date(e.day).getFullYear() == bill.day.getFullYear()))
+    throw new Error(`This dish isn't sell on ${bill.day.toDateString()}.`);
+
   billDetail.bill = bill;
+  billDetail.price = price;
 
   await billDetail.save();
 
