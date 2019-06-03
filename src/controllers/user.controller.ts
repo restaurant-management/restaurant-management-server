@@ -55,6 +55,13 @@ const getByEmail = async (req: Request, res: Response, next: NextFunction) => {
     }).catch(err => next(err));
 };
 
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
+    UserService.createUser(req.body.username,
+        req.body.email, req.body.password, req.body.fullName, req.body.birthday, req.body.avatar, req.body.role).then((user) => {
+            return res.status(200).json(user);
+        }).catch(err => next(err));
+};
+
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     UserService.deleteUser(req.params.username).then(() => {
         return res.status(200).json({message: 'Delete success.'});
@@ -133,7 +140,7 @@ const changeRole = (req: Request, res: Response,  next: NextFunction) => {
     }).catch(e => next(e))
 };
 
-export {register, login, getAll, getByUuid, getByUsername, getByEmail, editPassword,
+export {register, login, getAll, getByUuid, getByUsername, getByEmail, editPassword, createUser,
     deleteUser, editProfile, setPermission, addPermission, removePermission, changeRole, getAllPermissions}
 
 

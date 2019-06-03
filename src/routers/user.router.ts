@@ -7,6 +7,7 @@ const router = Router();
 
 router.post('/register', userController.register);
 router.post('/login', userController.login);
+router.post('/', Authorize(Permission.UserManagement), userController.createUser);
 router.get('/uuid/:uuid', Authorize(), userController.getByUuid);
 router.get('/:username', Authorize(), userController.getByUsername);
 router.put('/:username', Authorize(), userController.editProfile);

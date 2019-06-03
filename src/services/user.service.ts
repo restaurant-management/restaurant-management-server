@@ -65,7 +65,7 @@ const checkCorrectPassword = async (username: string, password: string) => {
     return passwordHandler.compare(password, user.password);
 }
 
-const createUser = async (_username: string, _email: string, _password: string, _fullName?: string, _birthday?: Date, _avatar?: string) => {
+const createUser = async (_username: string, _email: string, _password: string, _fullName?: string, _birthday?: Date, _avatar?: string, _role?: string) => {
     const userSameUsername = await User.findOne({where: {userName: _username}});
     const userSameEmail = await User.findOne({where: {email: _email}});
     if (userSameUsername || userSameEmail) {
@@ -79,7 +79,8 @@ const createUser = async (_username: string, _email: string, _password: string, 
     newUser.fullName = _fullName;
     newUser.birthday = _birthday;
     newUser.avatar = _avatar;
-    newUser.userRole = await Role.findOne({where: {slug: 'user'}});
+    newUser.userRole = await Role.findOne({where: {slug: _role || 'user'}});
+    if(!newUser.userRole) newUser.userRole = await Role.findOne({where: {slug: 'user'}});
 
     const user = await newUser.save();
     if (!user) throw new Error('Register failed.');
