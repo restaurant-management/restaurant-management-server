@@ -54,11 +54,35 @@ const getAll = async () => {
     return await Role.find();
 };
 
-const addPermission = async (slug: string, permission: string) => {
-    if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
-        throw new Error('Permission not found.');
+const setPermission = async (slug: string, permissions: string[]) => {
+    if(!permissions) permissions = [];
+    permissions.forEach(permission => {
+        if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
+        throw new Error(`Permission "${permission}" not found.`);
+    });
 
     let role = await Role.findOne({where: {slug}});
+    if (!role) throw new Error('Role not found.');
+
+    role.permissions = [];
+
+    permissions.forEach(permission => {
+        if (role.permissions.indexOf(permission) < 0) 
+        {   
+            role.permissions.push(permission);
+        }
+    });
+    const saved = await role.save();
+    if (!saved) throw new Error('Set permission failed.');
+    return saved;
+}
+
+const addPermission = async (slug: string, permission: string) => {
+    if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
+        throw new Error(`Permission "${permission}" not found.`);
+
+    let role = await Role.findOne({where: {slug}});
+    if (!role) throw new Error('Role not found.');
     if(!role.permissions) role.permissions = [];
     if(role.permissions.indexOf(permission) < 0) {
         role.permissions.push(permission);
@@ -75,4 +99,4 @@ const removePermission = async (slug: string, permission: string) => {
     return await role.save();
 };
 
-export {create, getAll, deleteRole, findBySlug, update, addPermission, removePermission}
+export {create, getAll, deleteRole, findBySlug, update, setPermission, addPermission, removePermission}

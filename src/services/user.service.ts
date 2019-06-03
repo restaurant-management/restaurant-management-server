@@ -145,6 +145,29 @@ const getAllPermissions = async (username: string) => {
     return result;
 };
 
+const setPermission = async (username: string, permissions: string[]) => {
+    if(!permissions) permissions = [];
+    permissions.forEach(permission => {
+        if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
+        throw new Error(`Permission "${permission}" not found.`);
+    });
+
+    let user = await User.findOne({where: {userName: username}});
+    if (!user) throw new Error('User not found.');
+
+    user.permissions = [];
+
+    permissions.forEach(permission => {
+        if (user.permissions.indexOf(permission) < 0) 
+        {   
+            user.permissions.push(permission);
+        }
+    });
+    const saved = await user.save();
+    if (!saved) throw new Error('Set permission failed.');
+    return saved;
+}
+
 const addPermission = async (username: string, permission: string) => {
     if (Object.keys(Permission).map(value => Permission[value]).indexOf(permission) < 0)
         throw new Error('Permission not found.');
@@ -198,6 +221,7 @@ export {
     getByUsername,
     deleteUser,
     editProfile,
+    setPermission,
     addPermission,
     removePermission,
     changeRole,

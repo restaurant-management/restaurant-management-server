@@ -109,6 +109,12 @@ const getAllPermissions = (req: Request, res: Response,  next: NextFunction) => 
     }).catch(e => next(e))
 }
 
+const setPermission = (req: Request, res: Response,  next: NextFunction) => {
+    UserService.setPermission(req.params.username, req.body.permissions).then(user => {
+        return res.status(200).json(user);
+    }).catch(e => next(e))
+};
+
 const addPermission = (req: Request, res: Response,  next: NextFunction) => {
     UserService.addPermission(req.params.username, req.params.permission).then(user => {
         return res.status(200).json(user);
@@ -128,6 +134,6 @@ const changeRole = (req: Request, res: Response,  next: NextFunction) => {
 };
 
 export {register, login, getAll, getByUuid, getByUsername, getByEmail, editPassword,
-    deleteUser, editProfile, addPermission, removePermission, changeRole, getAllPermissions}
+    deleteUser, editProfile, setPermission, addPermission, removePermission, changeRole, getAllPermissions}
 
 
