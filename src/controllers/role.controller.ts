@@ -32,6 +32,12 @@ const update = (req: Request, res: Response,  next: NextFunction) => {
     }).catch(e => next(e))
 };
 
+const setPermission = (req: Request, res: Response,  next: NextFunction) => {
+    RoleService.setPermission(req.params.slug, req.body.permissions).then(role => {
+        return res.status(200).json(role);
+    }).catch(e => next(e))
+};
+
 const addPermission = (req: Request, res: Response,  next: NextFunction) => {
     RoleService.addPermission(req.params.slug, req.params.permission).then(role => {
         return res.status(200).json(role);
@@ -44,4 +50,4 @@ const removePermission = (req: Request, res: Response,  next: NextFunction) => {
     }).catch(e => next(e))
 };
 
-export {create, getAll, deleteRole, getBySlug, update, addPermission, removePermission}
+export {create, getAll, deleteRole, getBySlug, update, setPermission, addPermission, removePermission}
