@@ -65,7 +65,7 @@ const checkCorrectPassword = async (username: string, password: string) => {
     return passwordHandler.compare(password, user.password);
 }
 
-const createUser = async (_username: string, _email: string, _password: string, _fullName?: string, _birthday?: Date) => {
+const createUser = async (_username: string, _email: string, _password: string, _fullName?: string, _birthday?: Date, _avatar?: string) => {
     const userSameUsername = await User.findOne({where: {userName: _username}});
     const userSameEmail = await User.findOne({where: {email: _email}});
     if (userSameUsername || userSameEmail) {
@@ -78,6 +78,7 @@ const createUser = async (_username: string, _email: string, _password: string, 
     newUser.password = passwordHandler.encode(_password);
     newUser.fullName = _fullName;
     newUser.birthday = _birthday;
+    newUser.avatar = _avatar;
     newUser.userRole = await Role.findOne({where: {slug: 'user'}});
 
     const user = await newUser.save();

@@ -6,7 +6,7 @@ import * as UserService from '../services/user.service';
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
     UserService.createUser(req.body.username,
-        req.body.email, req.body.password, req.body.fullName, req.body.birthday).then((user) => {
+        req.body.email, req.body.password, req.body.fullName, req.body.birthday, req.body.avatar).then((user) => {
             return res.status(200).json(user);
         }).catch(err => next(err));
 };
