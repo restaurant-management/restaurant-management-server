@@ -92,7 +92,7 @@ const deleteUser = async (username: string) => {
     const user = await User.findOne({where: {userName: username}});
 
     if (!user) throw new Error('User not found.');
-    if (user.userRole.slug === 'administrator') throw new Error('Can\'t delete user is administrator.');
+    if (user.role === 'administrator') throw new Error('Can\'t delete user is administrator.');
 
     await user.remove();
 };
