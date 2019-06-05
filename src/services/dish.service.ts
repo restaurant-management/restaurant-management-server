@@ -15,7 +15,7 @@ const update = async (dishId: number, _name?: string, _description?: string, _im
     if (!dish) throw new Error('Dish not found.');
     if (_name) dish.name = _name;
     if (_description) dish.description = _description;
-    if (_images) dish.images = _images;
+    dish.images = _images ? _images : [];
     if (_defaultPrice) dish.defaultPrice = _defaultPrice;
     return await dish.save();
 };
