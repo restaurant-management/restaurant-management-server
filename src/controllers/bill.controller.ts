@@ -26,7 +26,8 @@ const createCustom = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const editBill = (req: Request, res: Response, next: NextFunction) => {
-    BillService.edit(req.params.billId, req.body.day || new Date()).then(bill => {
+    BillService.edit(req.params.billId, req.body.user, req.body.day || new Date(), 
+        req.body.status, req.body.manager).then(bill => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
 };
@@ -74,7 +75,7 @@ const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
 
 const addDish = (req: Request, res: Response, next: NextFunction) => {
     if(!req.body.price) return next(new Error('Price is required.'))
-    BillService.addDish(req.params.dishId, req.params.billId, req.body.price).then((bill) => {
+    BillService.addDish(req.params.dishId, req.params.billId, req.body.price, req.body.quantity).then((bill) => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
 };

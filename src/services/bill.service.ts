@@ -42,7 +42,6 @@ const create = async (
   newBill.user = user;
   if(_manager)
     newBill.manager = await User.findOne({where : {userName: _manager}});
-  console.log(new Date(_day));
   newBill.day = new Date(_day);
   newBill.status = _status as BillStatus;
   newBill.billDetails = [];
@@ -67,11 +66,32 @@ const create = async (
   return await findOneBill(billId);
 };
 
-const edit = async (_billId: number, _day?: Date) => {
+const edit = async (_billId: number,
+  _username?: string,
+  _day?: Date,
+  _status?: string,
+  _manager?: string) => {
+    // Check status is correct
+    if (
+      _status &&
+      Object.keys(BillStatus)
+        .map(i => BillStatus[i])
+        .indexOf(_status) < 0
+    )
+      throw new Error("Bill Status not found.");
+  
+    if(!_username) throw new Error(`User is required.`);
+    const user = await User.findOne({ where: { userName: _username } });
+    if(!user) throw new Error(`User ${_username} not found`);
 
   let bill = await Bill.findOne(_billId);
   if (!bill) throw new Error("Bill not found,");
   if (_day) bill.day = _day;
+  bill.user = user;
+  if(_manager)
+    bill.manager = await User.findOne({where : {userName: _manager}});
+  bill.day = new Date(_day);
+  bill.status = _status as BillStatus;
   const billId = (await bill.save()).billId;
   return await findOneBill(billId);
 };
@@ -170,7 +190,7 @@ const getAllUserBills = async (
   return result;
 };
 
-const addDish = async (dishId: number, billId: number, price: number) => {
+const addDish = async (dishId: number, billId: number, price: number, quantity?: number) => {
   const dish = await Dish.findOne(dishId);
   if (!dish) throw new Error("Dish not found.");
 
@@ -191,6 +211,7 @@ const addDish = async (dishId: number, billId: number, price: number) => {
 
   billDetail.bill = bill;
   billDetail.price = price;
+  billDetail.quantity = quantity || 1;
 
   await billDetail.save();
 
