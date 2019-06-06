@@ -42,7 +42,6 @@ const create = async (
   newBill.user = user;
   if(_manager)
     newBill.manager = await User.findOne({where : {userName: _manager}});
-  console.log(new Date(_day));
   newBill.day = new Date(_day);
   newBill.status = _status as BillStatus;
   newBill.billDetails = [];
@@ -67,11 +66,61 @@ const create = async (
   return await findOneBill(billId);
 };
 
-const edit = async (_billId: number, _day?: Date) => {
+const edit = async (_billId: number,
+  _username?: string,
+  _dishIds?: number[],
+  _prices?: number[],
+  _quantities?: number[],
+  _day?: Date,
+  _status?: string,
+  _manager?: string) => {
+    // Check status is correct
+    if (
+      _status &&
+      Object.keys(BillStatus)
+        .map(i => BillStatus[i])
+        .indexOf(_status) < 0
+    )
+      throw new Error("Bill Status not found.");
+  
+    if (_quantities && _quantities.length !== _dishIds.length)
+      throw new Error(
+        "Number of DishIds have to equal with number of quantities."
+      );
+  
+    if (_prices.length !== _dishIds.length)
+      throw new Error("Number of DishIds have to equal with number of Prices.");
+  
+    if(!_username) throw new Error(`User is required.`);
+    const user = await User.findOne({ where: { userName: _username } });
+    if(!user) throw new Error(`User ${_username} not found`);
 
   let bill = await Bill.findOne(_billId);
   if (!bill) throw new Error("Bill not found,");
   if (_day) bill.day = _day;
+  bill.user = user;
+  if(_manager)
+    bill.manager = await User.findOne({where : {userName: _manager}});
+  bill.day = new Date(_day);
+  bill.status = _status as BillStatus;
+  bill.billDetails = [];
+  if (!_dishIds) throw new Error("DishIds must be not null.");
+  for (let i = 0; i < _dishIds.length; i++) {
+    const listDishes = await DailyDish.find({ where: {dishId: _dishIds[i]}})
+    if(!listDishes.find(e => new Date(e.day).getDate() == bill.day.getDate() 
+      && new Date(e.day).getMonth() == bill.day.getMonth() 
+      && new Date(e.day).getFullYear() == bill.day.getFullYear()))
+      throw new Error(`This dish isn't sell on ${bill.day.toDateString()}.`);
+
+    let dish = await Dish.findOne(_dishIds[i]);
+    let billDetail = new BillDetail();
+    billDetail.dish = dish;
+    if (_quantities)
+      billDetail.quantity = _quantities[i] > 0 ? _quantities[i] : 1;
+    billDetail.price = _prices[i];
+    billDetail.bill = bill;
+    bill.billDetails.push(billDetail);
+  }
   const billId = (await bill.save()).billId;
   return await findOneBill(billId);
 };

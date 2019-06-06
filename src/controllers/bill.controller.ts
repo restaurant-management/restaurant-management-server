@@ -26,7 +26,8 @@ const createCustom = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const editBill = (req: Request, res: Response, next: NextFunction) => {
-    BillService.edit(req.params.billId, req.body.day || new Date()).then(bill => {
+    BillService.edit(req.params.billId, req.body.user, req.body.dishIds, req.body.prices,
+        req.body.quantities, req.body.day || new Date(), req.body.status, req.body.manager).then(bill => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
 };
