@@ -190,7 +190,7 @@ const getAllUserBills = async (
   return result;
 };
 
-const addDish = async (dishId: number, billId: number, price: number) => {
+const addDish = async (dishId: number, billId: number, price: number, quantity?: number) => {
   const dish = await Dish.findOne(dishId);
   if (!dish) throw new Error("Dish not found.");
 
@@ -211,6 +211,7 @@ const addDish = async (dishId: number, billId: number, price: number) => {
 
   billDetail.bill = bill;
   billDetail.price = price;
+  billDetail.quantity = quantity || 1;
 
   await billDetail.save();
 
