@@ -14,7 +14,8 @@ const create = async (
   _prices: number[],
   _quantities?: number[],
   _day?: Date,
-  _status?: string
+  _status?: string,
+  _manager?: string
 ) => {
   // Check status is correct
   if (
@@ -33,10 +34,16 @@ const create = async (
   if (_prices.length !== _dishIds.length)
     throw new Error("Number of DishIds have to equal with number of Prices.");
 
+  if(!_username) throw new Error(`User is required.`);
   const user = await User.findOne({ where: { userName: _username } });
+  if(!user) throw new Error(`User ${_username} not found`);
+
   let newBill = new Bill();
   newBill.user = user;
-  newBill.day = _day || newBill.day;
+  if(_manager)
+    newBill.manager = await User.findOne({where : {userName: _manager}});
+  console.log(new Date(_day));
+  newBill.day = new Date(_day);
   newBill.status = _status as BillStatus;
   newBill.billDetails = [];
   if (!_dishIds) throw new Error("DishIds must be not null.");
