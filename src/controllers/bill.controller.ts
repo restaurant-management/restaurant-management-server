@@ -26,7 +26,7 @@ const createCustom = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const editBill = (req: Request, res: Response, next: NextFunction) => {
-    BillService.edit(req.params.billId, req.body.user, req.body.day || new Date(), 
+    BillService.edit(req.params.billId, req.body.user, req.body.day || new Date(),
         req.body.status, req.body.manager).then(bill => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
@@ -48,7 +48,7 @@ const deleteBill = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAll = (req: Request, res: Response, next: NextFunction) => {
-    BillService.getAll(req.query.day, req.query.length, req.query.offset, 
+    BillService.getAll(req.query.day, req.query.length, req.query.offset,
         checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePaidBillStatus]),
         checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePreparingBillStatus]),
         checkUserPermission(req['user'] as User, Permission.BillManagement),
@@ -56,9 +56,9 @@ const getAll = (req: Request, res: Response, next: NextFunction) => {
         checkUserPermission(req['user'] as User, Permission.BillManagement),
         checkUserPermission(req['user'] as User, Permission.BillManagement),
     )
-    .then((bills) => {
-        return res.status(200).json(bills);
-    }).catch(err => next(err));
+        .then((bills) => {
+            return res.status(200).json(bills);
+        }).catch(err => next(err));
 };
 
 const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
@@ -68,13 +68,13 @@ const getAllUserBills = (req: Request, res: Response, next: NextFunction) => {
     }
 
     BillService.getAllUserBills(req.params.username, req.query.length, req.query.offset)
-    .then((bills) => {
-        return res.status(200).json(bills);
-    }).catch(err => next(err));
+        .then((bills) => {
+            return res.status(200).json(bills);
+        }).catch(err => next(err));
 };
 
 const addDish = (req: Request, res: Response, next: NextFunction) => {
-    if(!req.body.price) return next(new Error('Price is required.'))
+    if (!req.body.price) return next(new Error('Price is required.'));
     BillService.addDish(req.params.dishId, req.params.billId, req.body.price, req.body.quantity).then((bill) => {
         return res.status(200).json(bill);
     }).catch(err => next(err));
@@ -135,6 +135,12 @@ const updateCompleteStatus = (req: Request, res: Response, next: NextFunction) =
     }).catch(err => next(err));
 };
 
+const countBillByDate = (req: Request, res: Response, next: NextFunction) => {
+    BillService.countByDate(req.query.startDate, req.query.endDate).then((value) => {
+        return res.status(200).json(value);
+    }).catch(err => next(err));
+};
+
 export {
     create,
     getById,
@@ -151,5 +157,6 @@ export {
     updateCompleteStatus,
     updatePaidStatus,
     updateCreatedStatus,
-    getAllUserBills
+    getAllUserBills,
+    countBillByDate
 }
