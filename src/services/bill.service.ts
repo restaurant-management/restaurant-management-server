@@ -68,9 +68,6 @@ const create = async (
 
 const edit = async (_billId: number,
   _username?: string,
-  _dishIds?: number[],
-  _prices?: number[],
-  _quantities?: number[],
   _day?: Date,
   _status?: string,
   _manager?: string) => {
@@ -82,14 +79,6 @@ const edit = async (_billId: number,
         .indexOf(_status) < 0
     )
       throw new Error("Bill Status not found.");
-  
-    if (_quantities && _quantities.length !== _dishIds.length)
-      throw new Error(
-        "Number of DishIds have to equal with number of quantities."
-      );
-  
-    if (_prices.length !== _dishIds.length)
-      throw new Error("Number of DishIds have to equal with number of Prices.");
   
     if(!_username) throw new Error(`User is required.`);
     const user = await User.findOne({ where: { userName: _username } });
@@ -103,24 +92,6 @@ const edit = async (_billId: number,
     bill.manager = await User.findOne({where : {userName: _manager}});
   bill.day = new Date(_day);
   bill.status = _status as BillStatus;
-  bill.billDetails = [];
-  if (!_dishIds) throw new Error("DishIds must be not null.");
-  for (let i = 0; i < _dishIds.length; i++) {
-    const listDishes = await DailyDish.find({ where: {dishId: _dishIds[i]}})
-    if(!listDishes.find(e => new Date(e.day).getDate() == bill.day.getDate() 
-      && new Date(e.day).getMonth() == bill.day.getMonth() 
-      && new Date(e.day).getFullYear() == bill.day.getFullYear()))
-      throw new Error(`This dish isn't sell on ${bill.day.toDateString()}.`);
-
-    let dish = await Dish.findOne(_dishIds[i]);
-    let billDetail = new BillDetail();
-    billDetail.dish = dish;
-    if (_quantities)
-      billDetail.quantity = _quantities[i] > 0 ? _quantities[i] : 1;
-    billDetail.price = _prices[i];
-    billDetail.bill = bill;
-    bill.billDetails.push(billDetail);
-  }
   const billId = (await bill.save()).billId;
   return await findOneBill(billId);
 };
