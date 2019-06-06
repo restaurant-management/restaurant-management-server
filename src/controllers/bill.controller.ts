@@ -47,7 +47,7 @@ const deleteBill = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAll = (req: Request, res: Response, next: NextFunction) => {
-    BillService.getAll(req.query.length, req.query.offset, 
+    BillService.getAll(req.query.day, req.query.length, req.query.offset, 
         checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePaidBillStatus]),
         checkUserPermission(req['user'] as User, [Permission.BillManagement, Permission.UpdatePreparingBillStatus]),
         checkUserPermission(req['user'] as User, Permission.BillManagement),

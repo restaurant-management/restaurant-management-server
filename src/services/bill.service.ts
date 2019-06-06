@@ -83,6 +83,7 @@ const deleteBill = async (billId: number) => {
 };
 
 const getAll = async (
+  day?: Date,
   length?: number,
   offset?: number,
   createdBill: boolean = false,
@@ -92,7 +93,7 @@ const getAll = async (
   deliveringBill: boolean = false,
   completeBill: boolean = false
 ) => {
-  let result = [];
+  let result: Bill[] = [];
   var listBills = await Bill.find({
     skip: offset,
     take: length,
@@ -128,6 +129,13 @@ const getAll = async (
       ...result,
       ...listBills.filter(e => e.status === BillStatus.Complete)
     ];
+
+  if(day) {
+    day = new Date(day);
+    result = result.filter(e => e.day.getUTCDate() === day.getUTCDate() && e.day.getMonth() === day.getMonth() && 
+      e.day.getFullYear() === day.getFullYear());
+  }
+
   return result;
 };
 
