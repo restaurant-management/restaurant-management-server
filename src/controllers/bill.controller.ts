@@ -18,8 +18,8 @@ const create = (req: Request, res: Response, next: NextFunction) => {
 const createCustom = (req: Request, res: Response, next: NextFunction) => {
     if (!(req['user'] as User).userName || !req.body.dishIds || !req.body.prices)
         return next(new Error('Missing body parameters.'));
-    BillService.create((req['user'] as User).userName, req.body.dishIds, req.body.prices,
-        req.body.quantities, req.body.day || new Date(), req.body.status)
+    BillService.create(req.body.user, req.body.dishIds, req.body.prices,
+        req.body.quantities, req.body.day || new Date(), req.body.status, req.body.manager)
         .then(bill => {
             return res.status(200).json(bill);
         }).catch(err => next(err));
