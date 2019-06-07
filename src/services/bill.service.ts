@@ -333,7 +333,7 @@ const countByDate = async (startDate: Date, endDate?: Date) => {
         .execute();
     const result = [];
 
-    while(start < end) {
+    while(start <= end) {
         const count = listBill.filter(e => e.day.getUTCDate() === start.getUTCDate()
             && e.day.getUTCMonth() === start.getUTCMonth() && e.day.getUTCFullYear() === start.getUTCFullYear()).length;
         result.push({day: `${start.getUTCDate()}/${start.getUTCMonth() + 1}/${start.getUTCFullYear()}`, count});
