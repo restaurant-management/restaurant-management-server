@@ -141,6 +141,12 @@ const countBillByDate = (req: Request, res: Response, next: NextFunction) => {
     }).catch(err => next(err));
 };
 
+const getDishOrderedByDay = (req: Request, res: Response, next: NextFunction) => {
+    BillService.getDishOrderedByDay(req.query.dishId, req.query.startDate, req.query.endDate).then(value => {
+        return res.status(200).json(value);
+    }).catch(err => next(err));
+}
+
 export {
     create,
     getById,
@@ -158,5 +164,6 @@ export {
     updatePaidStatus,
     updateCreatedStatus,
     getAllUserBills,
-    countBillByDate
+    countBillByDate,
+    getDishOrderedByDay
 }
