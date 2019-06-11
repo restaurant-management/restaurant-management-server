@@ -343,6 +343,32 @@ const countByDate = async (startDate: Date, endDate?: Date) => {
     return result;
 };
 
+const getDishOrderedByDay = async (dishId: number, startDate: Date, endDate?: Date) => {
+    let start = new Date(startDate);
+    const end = new Date(endDate);
+
+    console.log(start);
+    if((end.getTime() - start.getTime()) / (1000*60*60*24) > 60)
+        throw new Error("Exceeding amount days is 60 days.");
+    if(start > end) throw new Error("Start day must be less then end day.");
+
+    let listBill: Bill[] = await Bill.find({relations: ["billDetails"]});
+
+    listBill.forEach(e => e.billDetails.forEach(e1 => e1.dishId == dishId ? console.log(e1.dishId): console.log()));
+        
+    const result = [];
+
+    while(start <= end) {
+        const count = listBill.filter(e => e.day.getUTCDate() === start.getUTCDate()
+            && e.day.getUTCMonth() === start.getUTCMonth() && e.day.getUTCFullYear() === start.getUTCFullYear() 
+            && e.billDetails.find(bd => bd.dishId == dishId)).length;
+        result.push({day: `${start.getUTCDate()}/${start.getUTCMonth() + 1}/${start.getUTCFullYear()}`, count});
+        start = new Date(start.getTime() + 1000*60*60*24);
+    }
+
+    return result;
+}
+
 export {
     create,
     findById,
@@ -353,5 +379,6 @@ export {
     removeDish,
     updateStatus,
     getAllUserBills,
-    countByDate
+    countByDate,
+    getDishOrderedByDay
 };
